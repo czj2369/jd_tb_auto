@@ -10,62 +10,80 @@ while(true){
 
     // 进入京东主界面，检查是否存在“我的”右下角，如果存在，点击进去，接着判断是否存在全民叠蛋糕活动，如果有则点击进入
     if(descContains("我的").exists()){
+        log("进入我的界面");
         descContains("我的").findOne().click();
         // 判断是否有全民叠蛋糕活动
         if(textContains("全民").exists()){
+            log("进入叠蛋糕界面");
             idContains("tx").findOne().click();
             }
     }
     // 进入活动界面，点击中间的“做任务领金币”控件，进入任务界面
     if(idContains("homeSceneBtn").exists() && !textContains("去完成").exists()){
-    
+        log("进入活动界面并且点击做任务按钮");
         idContains("homeSceneBtn").findOne().click();
         sleep(1500);
     }
 
     // 进入任务界面，判断已完成控件，如果存在则点击
     if(textContains("去完成").find()[1]){
+        log("进入任务界面");
         textContains("去完成").find()[1].click();
     }
     sleep(3000);
-
-    // 进入浏览活动界面，等待八秒后自动返回
-    if(textContains("恭喜完成").exists() || textContains("玩一玩").exists() || descContains("领券中心").exists() 
-    || textContains("东东萌宠").exists() || textContains("瓜分红").exists() || textContains("全民开").exists()){
+    
+    if(textContains("恭喜完成").exists()){
         descContains("返回").findOne().click();
+        log("浏览八秒完成返回");
         continue;
     }
-    if(textContains("豆苗").exists() || textContains("京豆").exists()){
-        back();
+    // 进入浏览活动界面，等待八秒后自动返回
+    if(textContains("玩一玩").exists() || descContains("领券中心").exists() 
+    || textContains("东东萌宠").exists() || textContains("瓜分20").exists() || textContains("全民开").exists()
+    || textContains("豆苗").exists() || textContains("领京豆").exists()){
+        if(textContains("豆苗").exists() || textContains("领京豆").exists() || textContains("东东萌宠").exists()){
+            back();
+            log("浏览八秒完成返回");
+        }else{
+            descContains("返回").findOne().click();
+            log("浏览八秒完成返回");
+        }
+        continue;
     }
+
     // 进入浏览商品活动界面，浏览完毕后自动返回
     if(textContains("浏览以下").exists()){
+        log("进入浏览商品活动界面");
         var imges = idContains("view_").find();
         var i = 0;
         while(imges && !textContains("已完成").exists()){
             imges[i].click();
-            if(textContains("店铺").exists()){
+            if(textContains("店铺").exists() || textContains("加入购物车").exists()){
                 descContains("返回").findOne().click();
+                log("完成店铺浏览，返回");
             }
         
             sleep(3000);
             i = i+1;
         }
         descContains("返回").findOne().click();
+        log("浏览商品任务结束，返回");
         
     }
 
     // 进入加购物车活动界面，完成后自动返回
     if(textContains("当前页").exists()){
+        log("进入加购物车活动界面");
         var gouwuche = className("android.view.View").indexInParent(2).depth(18).find();
         var i = 0;
         while(gouwuche && !textContains("已完成").exists()){
             gouwuche[i].click();
             sleep(3000);
             i = i+1;
+            log("添加购物车");
         }
         descContains("返回").findOne().click();
-        
+        log("任务完成，返回");
     }
 
     sleep(3000);
