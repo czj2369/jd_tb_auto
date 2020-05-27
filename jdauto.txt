@@ -15,7 +15,7 @@ while(true){
         // 判断是否有全民叠蛋糕活动
         if(textContains("全民").exists()){
             log("进入叠蛋糕界面");
-            idContains("tx").findOne().click();
+            idContains("ur").findOne().click();
             }
     }
     // 进入活动界面，点击中间的“做任务领金币”控件，进入任务界面
@@ -39,9 +39,10 @@ while(true){
     }
     // 进入浏览活动界面，等待八秒后自动返回
     if(textContains("玩一玩").exists() || descContains("领券中心").exists() 
-    || textContains("东东萌宠").exists() || textContains("瓜分20").exists() || textContains("全民开").exists()
-    || textContains("豆苗").exists() || textContains("领京豆").exists()){
-        if(textContains("豆苗").exists() || textContains("领京豆").exists() || textContains("东东萌宠").exists()){
+    || textContains("东东萌宠").exists() || textContains("全民开").exists()
+    || textContains("豆苗").exists() || textContains("购物返豆").exists() || textContains("互动好物").exists()){
+        if(textContains("豆苗").exists() || textContains("购物返豆").exists() || textContains("东东萌宠").exists()){
+            log("豆苗领京豆东东萌宠");
             back();
             log("浏览八秒完成返回");
         }else{
