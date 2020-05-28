@@ -1,4 +1,4 @@
-auto.waitFor()
+auto.waitFor();
 var appName = "京东";
 
 // 建立一个循环，不断的检测里面控件的存在并且做出对应操作
@@ -38,10 +38,11 @@ while(true){
         continue;
     }
     // 进入浏览活动界面，等待八秒后自动返回
-    if(textContains("玩一玩").exists() || descContains("领券中心").exists() 
+    if(textContains("玩一玩").exists() || descContains("领券中心").exists() || textContains("逛新品").exists()
     || textContains("东东萌宠").exists() || textContains("全民开").exists()
     || textContains("豆苗").exists() || textContains("购物返豆").exists() || textContains("互动好物").exists()){
-        if(textContains("豆苗").exists() || textContains("购物返豆").exists() || textContains("东东萌宠").exists()){
+        if(textContains("豆苗").exists() || textContains("购物返豆").exists() 
+        || textContains("东东萌宠").exists() || textContains("逛新品").exists()){
             log("豆苗领京豆东东萌宠");
             back();
             log("浏览八秒完成返回");
@@ -75,10 +76,10 @@ while(true){
     // 进入加购物车活动界面，完成后自动返回
     if(textContains("当前页").exists()){
         log("进入加购物车活动界面");
-        var gouwuche = className("android.view.View").indexInParent(2).depth(18).find();
+        var shopCart = idContains("cart_").find();
         var i = 0;
-        while(gouwuche && !textContains("已完成").exists()){
-            gouwuche[i].click();
+        while(shopCart && !textContains("已完成").exists()){
+            shopCart[i].click();
             sleep(3000);
             i = i+1;
             log("添加购物车");
