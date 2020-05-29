@@ -1,0 +1,64 @@
+auto.waitFor();
+var appName = "手机淘宝";
+
+// 建立一个循环，不断的检测里面控件的存在并且做出对应操作
+while(true){
+    // 打开淘宝APP
+    launchApp(appName);
+
+    // 进入淘宝主界面，检查是否存在“我的淘宝”右下角，如果存在，点击进去，接着判断是否存在瓜分10亿活动，如果有则点击进入
+    if(descContains("我的淘宝").exists()){
+        log("进入我的界面");
+        descContains("我的淘宝").findOne().click();
+        // 判断是否有股份10亿
+        if(descContains("瓜分").exists()){
+            log("进入瓜分10亿界面");
+            descContains("瓜分").findOne().click();
+            }
+    }
+    // 进入活动界面，点击中间的“做任务领金币”控件，进入任务界面
+    if(textContains("做任务").exists() && !textContains("去完成").exists() && !textContains("去浏览").exists()){
+        log("进入活动界面并且点击做任务按钮");
+        textContains("做任务").findOne().click();
+        sleep(1500);
+    }
+
+    // 进入任务界面，判断已完成控件，如果存在则点击
+    if(textContains("去完成").exists()){
+        log("进入去完成任务界面");
+        textContains("去完成").findOne().click();
+        sleep(2000);
+        swipe(100, 100, 100, 200, 1000);
+    }
+    if(textContains("去浏览1").exists()){
+        log("去浏览");
+        textContains("去浏览").findOne().click();
+        sleep(2000);
+        swipe(100, 100, 100, 200, 1000);
+    }
+    if(textContains("去收菜").exists()){
+        log("去收菜");
+        textContains("去收菜").findOne().click();
+        sleep(2000);
+        swipe(100, 100, 100, 200, 1000);
+    }
+    sleep(3000);
+    
+    if(textContains("任务已完成").exists()){
+        back();
+        back();
+    }
+
+    if(descContains("任务已完成").exists() || textContains("继续逛逛吧").exists() ||descContains("继续逛逛吧").exists()){
+        back();
+        log("浏览15秒完成返回");
+        continue;
+    }
+    sleep(3000);
+
+}
+
+
+
+
+
