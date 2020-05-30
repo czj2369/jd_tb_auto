@@ -30,7 +30,7 @@ while(true){
         sleep(2000);
         swipe(100, 100, 100, 200, 1000);
     }
-    if(textContains("去浏览1").exists()){
+    if(textContains("去浏览").exists()){
         log("去浏览");
         textContains("去浏览").findOne().click();
         sleep(2000);
@@ -42,14 +42,16 @@ while(true){
         sleep(2000);
         swipe(100, 100, 100, 200, 1000);
     }
+    if(textContains("去逛逛").exists()){
+        log("去逛逛");
+        textContains("去逛逛").findOne().click();
+        sleep(2000);
+        swipe(100, 100, 100, 200, 1000);
+    }
     sleep(3000);
     
-    if(textContains("任务已完成").exists()){
-        back();
-        back();
-    }
-
-    if(descContains("任务已完成").exists() || textContains("继续逛逛吧").exists() ||descContains("继续逛逛吧").exists()){
+    if(descContains("任务已完成").exists() || textContains("任务已完成").exists() || 
+    textContains("继续逛逛吧").exists() ||descContains("继续逛逛吧").exists() || descContains("任务完成").exists()){
         back();
         log("浏览15秒完成返回");
         continue;
@@ -57,8 +59,3 @@ while(true){
     sleep(3000);
 
 }
-
-
-
-
-

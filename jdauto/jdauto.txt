@@ -7,7 +7,6 @@ while(true){
     launchApp(appName);
     // 睡眠5秒，等待程序加载
     sleep(5000);
-
     // 进入京东主界面，检查是否存在“我的”右下角，如果存在，点击进去，接着判断是否存在全民叠蛋糕活动，如果有则点击进入
     if(descContains("我的").exists()){
         log("进入我的界面");
@@ -18,6 +17,7 @@ while(true){
             idContains("ur").findOne().click();
             }
     }
+
     // 进入活动界面，点击中间的“做任务领金币”控件，进入任务界面
     if(idContains("homeSceneBtn").exists() && !textContains("去完成").exists()){
         log("进入活动界面并且点击做任务按钮");
@@ -28,7 +28,13 @@ while(true){
     // 进入任务界面，判断已完成控件，如果存在则点击
     if(textContains("去完成").find()[1]){
         log("进入任务界面");
-        textContains("去完成").find()[1].click();
+        if(textContains("所在战队成员满3人").exists()){
+            textContains("去完成").find()[2].click();
+        }else{
+            textContains("去完成").find()[1].click();
+        }
+        
+        
     }
     sleep(3000);
     
@@ -39,7 +45,7 @@ while(true){
     }
     // 进入浏览活动界面，等待八秒后自动返回
     if(textContains("玩一玩").exists() || descContains("领券中心").exists() || textContains("逛新品").exists()
-    || textContains("东东萌宠").exists() || textContains("全民开").exists()
+    || textContains("东东萌宠").exists() || textContains("全民开").exists() || textContains("1元包邮").exists()
     || textContains("豆苗").exists() || textContains("购物返豆").exists() || textContains("互动好物").exists()){
         if(textContains("豆苗").exists() || textContains("购物返豆").exists() 
         || textContains("东东萌宠").exists() || textContains("逛新品").exists()){
@@ -52,6 +58,14 @@ while(true){
         }
         continue;
     }
+    if(textContains("618攻略").exists()){
+        log("退出618专场");
+        back();
+    }
+    if(idContains("arv").exists()){
+        log("点击屏幕中的X");
+        idContains("arv").findOne().click();
+    }
 
     // 进入浏览商品活动界面，浏览完毕后自动返回
     if(textContains("浏览以下").exists()){
@@ -60,12 +74,12 @@ while(true){
         var i = 0;
         while(imges && !textContains("已完成").exists()){
             imges[i].click();
+            sleep(3000);
             if(textContains("店铺").exists() || textContains("加入购物车").exists()){
                 descContains("返回").findOne().click();
                 log("完成店铺浏览，返回");
             }
-        
-            sleep(3000);
+            sleep(2000);
             i = i+1;
         }
         descContains("返回").findOne().click();
@@ -91,8 +105,3 @@ while(true){
     sleep(3000);
 
 }
-
-
-
-
-
