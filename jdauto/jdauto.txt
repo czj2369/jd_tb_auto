@@ -1,6 +1,7 @@
 auto.waitFor();
 var appName = "京东";
 
+var finishButtonNum = 1;
 // 建立一个循环，不断的检测里面控件的存在并且做出对应操作
 while(true){
     // 打开京东APP
@@ -26,16 +27,18 @@ while(true){
     }
 
     // 进入任务界面，判断已完成控件，如果存在则点击
-    if(textContains("去完成").find()[1]){
+    if(textContains("去完成").exists()){
         log("进入任务界面");
-        if(textContains("所在战队成员满3人").exists()){
-            textContains("去完成").find()[2].click();
-        }else{
-            textContains("去完成").find()[1].click();
-        }
-        
-        
+        textContains("去完成").find()[finishButtonNum].click();
     }
+
+    if(textContains("组满5人队").exists() || descContains("组满5人队").exists()){
+        log("进入组队界面");
+        if(descContains("返回").findOne().click()){
+            finishButtonNum = finishButtonNum + 1;
+        }
+    }
+
     sleep(3000);
     
     if(textContains("恭喜完成").exists()){
@@ -43,10 +46,12 @@ while(true){
         log("浏览八秒完成返回");
         continue;
     }
-    // 进入浏览活动界面，等待八秒后自动返回
+
+    // 进入浏览活动界面，不用等待直接返回
     if(textContains("玩一玩").exists() || descContains("领券中心").exists() || textContains("逛新品").exists()
     || textContains("东东萌宠").exists() || textContains("全民开").exists() || textContains("1元包邮").exists()
-    || textContains("豆苗").exists() || textContains("购物返豆").exists() || textContains("互动好物").exists()){
+    || textContains("豆苗").exists() || textContains("购物返豆").exists() || textContains("互动好物").exists()
+    || textContains("城市嘉年华").exists()){
         if(textContains("豆苗").exists() || textContains("购物返豆").exists() 
         || textContains("东东萌宠").exists() || textContains("逛新品").exists()){
             log("豆苗领京豆东东萌宠");
@@ -58,17 +63,14 @@ while(true){
         }
         continue;
     }
-    if(textContains("618攻略").exists()){
-        log("退出618专场");
-        back();
-    }
+
     if(idContains("arv").exists()){
         log("点击屏幕中的X");
         idContains("arv").findOne().click();
     }
 
     // 进入浏览商品活动界面，浏览完毕后自动返回
-    if(textContains("浏览以下").exists()){
+    if(textContains("浏览以下5个商品").exists() && !textContains("去完成").exists()){
         log("进入浏览商品活动界面");
         var imges = idContains("view_").find();
         var i = 0;

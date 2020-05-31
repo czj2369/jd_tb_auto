@@ -1,6 +1,8 @@
 auto.waitFor();
 var appName = "手机淘宝";
 
+var finishButtonNum = 1;
+
 // 建立一个循环，不断的检测里面控件的存在并且做出对应操作
 while(true){
     // 打开淘宝APP
@@ -10,7 +12,7 @@ while(true){
     if(descContains("我的淘宝").exists()){
         log("进入我的界面");
         descContains("我的淘宝").findOne().click();
-        // 判断是否有股份10亿
+        // 判断是否有瓜分10亿
         if(descContains("瓜分").exists()){
             log("进入瓜分10亿界面");
             descContains("瓜分").findOne().click();
@@ -36,15 +38,19 @@ while(true){
         sleep(2000);
         swipe(100, 100, 100, 200, 1000);
     }
-    if(textContains("去收菜").exists()){
-        log("去收菜");
-        textContains("去收菜").findOne().click();
-        sleep(2000);
-        swipe(100, 100, 100, 200, 1000);
+    
+    // 跳过淘宝人生
+    if(idContains("layaCanvas").exists()){
+        if(back() && back()){
+            finishButtonNum = finishButtonNum+1;
+        }
     }
+
     if(textContains("去逛逛").exists()){
         log("去逛逛");
-        textContains("去逛逛").findOne().click();
+        if(textContains("去逛逛").find()[1]){
+            textContains("去逛逛").find()[1].click();
+        }
         sleep(2000);
         swipe(100, 100, 100, 200, 1000);
     }
