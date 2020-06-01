@@ -15,7 +15,7 @@ while(true){
         // 判断是否有全民叠蛋糕活动
         if(textContains("全民").exists()){
             log("进入叠蛋糕界面");
-            idContains("ur").findOne().click();
+            idContains("us").findOne().click();
             }
     }
 
