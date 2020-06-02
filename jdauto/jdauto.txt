@@ -15,8 +15,12 @@ while(true){
         // 判断是否有全民叠蛋糕活动
         if(textContains("全民").exists()){
             log("进入叠蛋糕界面");
-            idContains("ur").findOne().click();
+            if(idContains("ur").exists()){
+                idContains("ur").findOne().click();
+            }else if(idContains("ur").exists()){
+                idContains("us").findOne().click();
             }
+        }
     }
 
     // 进入活动界面，点击中间的“做任务领金币”控件，进入任务界面
@@ -32,7 +36,7 @@ while(true){
         textContains("去完成").find()[finishButtonNum].click();
     }
 
-    if(textContains("组满5人队").exists() || descContains("组满5人队").exists()){
+    if(textContains("战队红包").exists() || descContains("战队红包").exists()){
         log("进入组队界面");
         if(descContains("返回").findOne().click()){
             finishButtonNum = finishButtonNum + 1;
@@ -51,9 +55,13 @@ while(true){
     if(textContains("玩一玩").exists() || descContains("领券中心").exists() || textContains("逛新品").exists()
     || textContains("东东萌宠").exists() || textContains("全民开").exists() || textContains("1元包邮").exists()
     || textContains("豆苗").exists() || textContains("购物返豆").exists() || textContains("互动好物").exists()
-    || textContains("城市嘉年华").exists()){
-        if(textContains("豆苗").exists() || textContains("购物返豆").exists() 
-        || textContains("东东萌宠").exists() || textContains("逛新品").exists()){
+    || textContains("城市嘉年华").exists() || textContains("城市嘉年华").exists() || textContains("超级盒子免息驾到").exists()
+    || textContains("大牌爆").exists() || descContains("大牌爆").exists() || textContains("京享值").exists() 
+    || descContains("京享值").exists()){
+        if(textContains("豆苗").exists() || textContains("趋势报告").exists() 
+        || textContains("东东萌宠").exists() || textContains("逛新品").exists()
+        || textContains("超级盒子免息驾到").exists() || textContains("大牌爆").exists() || descContains("大牌爆").exists()
+        || textContains("京享值").exists() || descContains("京享值").exists()){
             log("豆苗领京豆东东萌宠");
             back();
             log("浏览八秒完成返回");

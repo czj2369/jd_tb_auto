@@ -57,7 +57,8 @@ while(true){
     sleep(3000);
     
     if(descContains("任务已完成").exists() || textContains("任务已完成").exists() || 
-    textContains("继续逛逛吧").exists() ||descContains("继续逛逛吧").exists() || descContains("任务完成").exists()){
+    textContains("继续逛逛吧").exists() ||descContains("继续逛逛吧").exists() || descContains("任务完成").exists()
+    ||descContains("返回看看").exists()){
         back();
         log("浏览15秒完成返回");
         continue;
