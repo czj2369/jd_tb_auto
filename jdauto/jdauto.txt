@@ -57,7 +57,7 @@ while(true){
     || textContains("豆苗").exists() || textContains("购物返豆").exists() || textContains("互动好物").exists()
     || textContains("城市嘉年华").exists() || textContains("城市嘉年华").exists() || textContains("超级盒子免息驾到").exists()
     || textContains("大牌爆").exists() || descContains("大牌爆").exists() || textContains("京享值").exists() 
-    || descContains("京享值").exists()){
+    || descContains("京享值").exists() || descContains("趋势报告").exists() || textContains("趋势报告").exists()){
         if(textContains("豆苗").exists() || textContains("趋势报告").exists() 
         || textContains("东东萌宠").exists() || textContains("逛新品").exists()
         || textContains("超级盒子免息驾到").exists() || textContains("大牌爆").exists() || descContains("大牌爆").exists()
