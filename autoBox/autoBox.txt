@@ -4,6 +4,31 @@ events.observeKey();
 events.onKeyDown("volume_down",function(event){
             threads.shutDownAll();
         });
+ui.layout(
+    <vertical padding="16">
+        <button id="jdAutoButton" text="JD叠蛋糕" style="Widget.AppCompat.Button.Colored" w="*"/>
+        <button id="jdGoldButton" text="JD小金人" style="Widget.AppCompat.Button.Colored" w="*"/>
+        <button id="tbAutoButton" text="TB领猫币" style="Widget.AppCompat.Button.Colored" w="*"/>
+        <text margin="8">
+        1.音量下键结束活动
+        </text>
+        <text margin="8">
+        2.如果无法自动进入活动界面，请手动进入活动界面
+        </text>
+        <text margin="8">
+        3.如果有的活动无法自动完成，请手动完成
+        </text>
+    </vertical>
+);
+ui.jdAutoButton.on("click", ()=>{
+    threads.start(JDAutoThread);
+});
+ui.tbAutoButton.on("click", ()=>{
+    threads.start(tbAutoThread);
+});
+ui.jdGoldButton.on("click", ()=>{
+    threads.start(jdGoldThread);
+});
 var JDAutoThread = function(){
     // JD叠蛋糕
     toast("JD叠蛋糕");
@@ -228,33 +253,3 @@ var jdGoldThread = function(){
         }
     }
 };
-
-threads.start(function(){
-    ui.run(()=>{
-        ui.layout(
-            <vertical padding="16">
-                <button id="jdAutoButton" text="JD叠蛋糕" style="Widget.AppCompat.Button.Colored" w="*"/>
-                <button id="jdGoldButton" text="JD小金人" style="Widget.AppCompat.Button.Colored" w="*"/>
-                <button id="tbAutoButton" text="TB领猫币" style="Widget.AppCompat.Button.Colored" w="*"/>
-                <text margin="8">
-                1.音量下键结束活动
-                </text>
-                <text margin="8">
-                2.如果无法自动进入活动界面，请手动进入活动界面
-                </text>
-                <text margin="8">
-                3.如果有的活动无法自动完成，请手动完成
-                </text>
-            </vertical>
-        );
-        ui.jdAutoButton.on("click", ()=>{
-            threads.start(JDAutoThread);
-        });
-        ui.tbAutoButton.on("click", ()=>{
-            threads.start(tbAutoThread);
-        });
-        ui.jdGoldButton.on("click", ()=>{
-            threads.start(jdGoldThread);
-        });
-    });
-});
