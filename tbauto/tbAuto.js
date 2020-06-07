@@ -6,18 +6,13 @@ while(true){
     // 打开淘宝APP
     launchApp(appName);
     
-    // 进入淘宝主界面，检查是否存在“我的淘宝”右下角，如果存在，点击进去，接着判断是否存在瓜分10亿活动，如果有则点击进入
-    if(descContains("首页").exists()){
-        log("进入我的界面");
-        descContains("首页").findOne().click();
-        // 判断是否有瓜分10亿
-        if(className("android.widget.FrameLayout").depth(12).indexInParent(9).exists()){
-            log("进入瓜分10亿界面");
-            className("android.widget.FrameLayout").depth(12).indexInParent(9).findOne().click();
-        }   
+    // 判断是否有瓜分10亿
+    if(className("android.widget.FrameLayout").depth(12).indexInParent(9).exists()){
+        log("进入瓜分10亿界面");
+        className("android.widget.FrameLayout").depth(12).indexInParent(9).findOne().click();
         sleep(1500);
-    }
-
+    }   
+    
     if(textContains("收下祝福").exists()){
         log("收下祝福");
         textContains("收下祝福").findOne().click();
