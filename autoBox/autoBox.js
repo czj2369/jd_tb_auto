@@ -48,7 +48,7 @@ while(true){
         descContains("我的").findOne().click();
         sleep(2000);
         // 判断是否有全民叠蛋糕活动
-        if(textContains("叠蛋糕分").exists()){
+        if(textContains("叠蛋糕分10亿").exists()){
             log("进入叠蛋糕界面");
             if(idContains("ur").exists()){
                 idContains("ur").findOne().click();
@@ -58,6 +58,8 @@ while(true){
         }
         sleep(2000);
     }
+
+
 
     // 签到
     if(textContains("签到").exists()){
@@ -91,12 +93,20 @@ while(true){
         descContains("返回").findOne().click();
         log("浏览八秒完成返回");
         sleep(2000);
-        continue;
     }
 
+    sleep(2000);
     if(idContains("g4").exists() && idContains("fd").exists() && !textContains("vk image").exists()){
         sleep(2000);
-        back();
+        // 跳过开会员卡任务，如果需要请手动
+        if(textContains("会员卡详情").exists()){
+            if(back()){
+                finishButtonNum = finishButtonNum + 1;
+            }
+        }else{
+            back();
+        }
+        
         log("back返回");
         sleep(2000);
     }
@@ -106,29 +116,28 @@ while(true){
     if(textContains("玩一玩").exists() || descContains("领券中心").exists() || textContains("逛新品").exists()
     || textContains("东东萌宠").exists() || textContains("全民开").exists() || textContains("1元包邮").exists()
     || textContains("豆苗").exists() || textContains("购物返豆").exists() || textContains("互动好物").exists()
-    || textContains("城市嘉年华").exists() || textContains("城市嘉年华").exists() || textContains("超级盒子免息驾到").exists()
-    || textContains("大牌爆").exists() || descContains("大牌爆").exists() || textContains("京享值").exists() 
+    || textContains("城市嘉年华").exists() || textContains("城市嘉年华").exists() 
+    || textContains("超级盒子免息驾到").exists()|| textContains("京享值").exists() 
     || descContains("京享值").exists() || descContains("趋势报告").exists() || textContains("趋势报告").exists()
     || descContains("618省钱攻略").exists() || textContains("618省钱攻略").exists()
     || descContains("综艺狂欢趴").exists() || textContains("综艺狂欢趴").exists()){
-        if(textContains("豆苗").exists() || textContains("趋势报告").exists() 
-        || textContains("东东萌宠").exists() || textContains("逛新品").exists()
-        || textContains("超级盒子免息驾到").exists() || textContains("大牌爆").exists() || descContains("大牌爆").exists()
-        || textContains("京享值").exists() || descContains("京享值").exists()){
+        if(textContains("豆苗").exists() || textContains("东东萌宠").exists() || textContains("逛新品").exists()
+        || textContains("超级盒子免息驾到").exists() || textContains("购物返豆").exists()){
             back();
-            log("back返回");
+            log("活动back返回");    
             sleep(2000);
         }else{
             descContains("返回").findOne().click();
             log("直接返回");
             sleep(2000);
         }
+        sleep(2000);
         continue;
     }
 
-    if(idContains("arv").exists()){
-        log("点击屏幕中的X");
-        idContains("arv").findOne().click();
+    if(idContains("继续领红包").exists()){
+        log("点击屏幕中的继续领红包");
+        idContains("继续领红包").findOne().click();
         sleep(2000);
     }
 
