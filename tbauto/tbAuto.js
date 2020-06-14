@@ -7,9 +7,9 @@ while(true){
     launchApp(appName);
     
     // 判断是否有瓜分10亿
-    if(className("android.widget.FrameLayout").depth(12).indexInParent(9).exists()){
+    if(className("android.widget.FrameLayout").depth(11).indexInParent(11).exists()){
         log("进入瓜分10亿界面");
-        className("android.widget.FrameLayout").depth(12).indexInParent(9).findOne().click();
+        className("android.widget.FrameLayout").depth(11).indexInParent(11).findOne().click();
         sleep(1500);
     }   
     
