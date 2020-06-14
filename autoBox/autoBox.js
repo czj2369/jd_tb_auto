@@ -40,13 +40,13 @@ var finishButtonNum = 1;
 while(true){
     // 打开京东APP
     launchApp(appName);
-    // 睡眠3秒，等待程序加载
-    sleep(3000);
+    // 睡眠1.5秒，等待程序加载
+    sleep(1500);
     // 进入京东主界面，检查是否存在“我的”右下角，如果存在，点击进去，接着判断是否存在全民叠蛋糕活动，如果有则点击进入
     if(descContains("我的").exists()){
         log("进入我的界面");
         descContains("我的").findOne().click();
-        sleep(2000);
+        sleep(1500);
         // 判断是否有全民叠蛋糕活动
         if(textContains("叠蛋糕分10亿").exists()){
             log("进入叠蛋糕界面");
@@ -78,7 +78,7 @@ while(true){
     if(textContains("去完成").exists()){
         log("进入任务界面");
         textContains("去完成").find()[finishButtonNum].click();
-        sleep(4000);
+        sleep(2000);
     }
 
     if(textContains("战队红包").exists() || descContains("战队红包").exists()){
@@ -95,7 +95,6 @@ while(true){
         sleep(2000);
     }
 
-    sleep(2000);
     if(idContains("g4").exists() && idContains("fd").exists() && !textContains("vk image").exists()){
         sleep(2000);
         // 跳过开会员卡任务，如果需要请手动
@@ -131,7 +130,6 @@ while(true){
             log("直接返回");
             sleep(2000);
         }
-        sleep(2000);
         continue;
     }
 
@@ -153,17 +151,17 @@ while(true){
         var i = 0;
         while(imges && !textContains("已完成").exists()){
             imges[i].click();
-            sleep(3000);
+            sleep(2000);
             if(textContains("店铺").exists() || textContains("加入购物车").exists()){
                 descContains("返回").findOne().click();
                 log("完成店铺浏览，返回");
             }
-            sleep(2000);
+            sleep(1500);
             i = i+1;
         }
         descContains("返回").findOne().click();
         log("浏览商品任务结束，返回");
-        sleep(2000);
+        sleep(1500);
         
     }
 
@@ -174,13 +172,13 @@ while(true){
         var i = 0;
         while(shopCart && !textContains("已完成").exists()){
             shopCart[i].click();
-            sleep(3000);
+            sleep(1500);
             i = i+1;
             log("添加购物车");
         }
         descContains("返回").findOne().click();
         log("任务完成，返回");
-        sleep(2000);
+        sleep(1500);
     }
 
 }
