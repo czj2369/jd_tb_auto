@@ -14,13 +14,10 @@ while(true){
         descContains("我的").findOne().click();
         sleep(1500);
         // 判断是否有全民叠蛋糕活动
-        if(textContains("叠蛋糕分10亿").exists()){
-            log("进入叠蛋糕界面");
-            if(idContains("ur").exists()){
-                idContains("ur").findOne().click();
-            }else if(idContains("ur").exists()){
-                idContains("us").findOne().click();
-            }
+        if(idContains("ur").exists()){
+            idContains("ur").findOne().click();
+        }else if(idContains("ur").exists()){
+            idContains("us").findOne().click();
         }
         sleep(2000);
     }
@@ -68,11 +65,13 @@ while(true){
             if(back()){
                 finishButtonNum = finishButtonNum + 1;
             }
+            log("跳过会员卡任务");
         }else{
             back();
+            log("back返回");
         }
         
-        log("back返回");
+
         sleep(2000);
     }
 
