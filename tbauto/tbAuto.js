@@ -69,6 +69,6 @@ while(true){
         log("直接返回");
         continue;
     }
-    sleep(3000);
+    sleep(1500);
 
 }

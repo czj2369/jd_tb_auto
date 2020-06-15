@@ -16,7 +16,7 @@ while(true){
         // 判断是否有全民叠蛋糕活动
         if(idContains("ur").exists()){
             idContains("ur").findOne().click();
-        }else if(idContains("ur").exists()){
+        }else if(idContains("us").exists()){
             idContains("us").findOne().click();
         }
         sleep(2000);
@@ -39,9 +39,12 @@ while(true){
 
     // 进入任务界面，判断已完成控件，如果存在则点击
     if(textContains("去完成").exists()){
-        log("进入任务界面");
-        textContains("去完成").find()[finishButtonNum].click();
-        sleep(2000);
+        
+        if(textContains("去完成").find()[finishButtonNum].click()){
+            sleep(4000);
+            log("进入任务界面");
+        }
+        
     }
 
     if(textContains("战队红包").exists() || descContains("战队红包").exists()){
@@ -57,34 +60,32 @@ while(true){
         log("浏览八秒完成返回");
         sleep(2000);
     }
-
-    if(idContains("g4").exists() && idContains("fd").exists() && !textContains("vk image").exists()){
-        sleep(2000);
-        // 跳过开会员卡任务，如果需要请手动
-        if(textContains("会员卡详情").exists()){
-            if(back()){
-                finishButtonNum = finishButtonNum + 1;
-            }
+    // 跳过开会员卡任务，如果需要请手动
+    if(textContains("会员卡详情").exists()){
+        if(back()){
+            finishButtonNum = finishButtonNum + 1;
             log("跳过会员卡任务");
-        }else{
-            back();
-            log("back返回");
+            sleep(2000);
         }
         
+    }
 
-        sleep(2000);
+    //直接返回不需要等待的活动
+    if(idContains("g4").exists() && idContains("fd").exists() && (!textContains("vk image").exists() || 
+    !idContains("vh").exists() || !textContains("S").exists())){
+        if(back()){
+            log("back返回");
+            sleep(2000);
+        }
     }
 
 
     // 进入浏览活动界面，不用等待直接返回
     if(textContains("玩一玩").exists() || descContains("领券中心").exists() || textContains("逛新品").exists()
     || textContains("东东萌宠").exists() || textContains("全民开").exists() || textContains("1元包邮").exists()
-    || textContains("豆苗").exists() || textContains("购物返豆").exists() || textContains("互动好物").exists()
+    || textContains("豆苗").exists() || textContains("互动好物").exists()
     || textContains("城市嘉年华").exists() || textContains("城市嘉年华").exists() 
-    || textContains("超级盒子免息驾到").exists()|| textContains("京享值").exists() 
-    || descContains("京享值").exists() || descContains("趋势报告").exists() || textContains("趋势报告").exists()
-    || descContains("618省钱攻略").exists() || textContains("618省钱攻略").exists()
-    || descContains("综艺狂欢趴").exists() || textContains("综艺狂欢趴").exists()){
+    || textContains("超级盒子免息驾到").exists()){
         if(textContains("豆苗").exists() || textContains("东东萌宠").exists() || textContains("逛新品").exists()
         || textContains("超级盒子免息驾到").exists() || textContains("购物返豆").exists()){
             back();
@@ -117,7 +118,7 @@ while(true){
         while(imges && !textContains("已完成").exists()){
             imges[i].click();
             sleep(2000);
-            if(textContains("店铺").exists() || textContains("加入购物车").exists()){
+            if(textContains("店铺").exists() || textContains("购物车").exists()){
                 descContains("返回").findOne().click();
                 log("完成店铺浏览，返回");
             }
@@ -131,7 +132,7 @@ while(true){
     }
 
     // 进入加购物车活动界面，完成后自动返回
-    if(textContains("当前页").exists()){
+    if(textContains("当前页点击加购以下").exists()){
         log("进入加购物车活动界面");
         var shopCart = idContains("cart_").find();
         var i = 0;
