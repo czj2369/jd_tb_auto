@@ -3,7 +3,7 @@
 # 重要说明
 高版本淘宝有制裁规则，会监控auto.js等脚本app进程，奖励会变得特别低<br>
 亲测淘宝V9.5.7版不会监控进程，可以获得全额奖励，推荐使用此版本<br>
-<a url="https://www.wandoujia.com/apps/32267/history_v278">淘宝9.5.7下载</a><br>
+<a href="https://www.wandoujia.com/apps/32267/history_v278"><span>淘宝9.5.7下载</span></a><br>
 感谢@hyue418
 项目地址：https://github.com/hyue418/taobao-11-11
 <br>
