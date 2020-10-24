@@ -1,6 +1,6 @@
 auto.waitFor();
 var appName = "手机淘宝";
-var finishIndex = 1;
+var finishIndex = 0;
 // 建立一个循环，不断的检测里面控件的存在并且做出对应操作
 while(true){
     // 打开淘宝APP
@@ -20,6 +20,8 @@ while(true){
 
     // 点击'领取奖励'
     clickByTextName("领取奖励");
+    // 点击'签到'
+    clickByTextName("签到");
     // 点击'去浏览'
     clickByTextName("去浏览");
     // 点击'去搜索'
@@ -42,8 +44,8 @@ function clickByDescName(descName){
 
 // 通过文本获取控件并点击
 function clickByTextName(textName){
-    if(textName == "去完成" && textContains("邀请好友一起撸猫").exists()){
-        if(textContains("淘宝特价版").exists()){
+    if(textName == "去完成"){
+        if(textContains("淘宝特价版").exists() || textContains("邀请好友一起撸猫").exists()){
             if(textContains(textName).find()[finishIndex]!=null){
                 textContains(textName).find()[finishIndex].click();
             }
@@ -62,20 +64,23 @@ function clickByTextName(textName){
 function backByFinish(){
     if(textContains("任务完成").exists() || textContains("全部完成啦").exists() ||
     descContains("任务完成").exists() || textContains("任务已完成").exists() ||
-    descContains("继续退出").exists() || descContains("全部完成啦").exists()){
+    descContains("继续退出").exists() || descContains("全部完成啦").exists() || 
+    textContains("当面分享").exists()){
         log("返回上层");
         back();
     }
 }
 
+// 判断是否需要将'去完成'的下标修改
 function finishIndexAdd(){
-    if(textContains("淘宝特价版送红包").exists() && textContains("天天签到领红包").exists()){
+    if((textContains("淘宝特价版送红包").exists() && textContains("天天签到领红包").exists()) ||
+    textContains("快和我一起撸猫").exists()){
         if(back()){
             finishIndex = finishIndex + 1;
         }
     }
     if(textContains("去完成").find()[3]!=null){
-        finishIndex = 1;
+        finishIndex = 0;
     }
 }
 
