@@ -26,6 +26,8 @@ while(true){
     clickByTextName("去浏览");
     // 点击'去搜索'
     clickByTextName("去搜索");
+    // 点击'去搜索'
+    clickByTextName("去观看");
     // 点击'去完成'
     clickByTextName("去完成");
     sleep(1500);
@@ -79,7 +81,7 @@ function finishIndexAdd(){
             finishIndex = finishIndex + 1;
         }
     }
-    if(textContains("去完成").find()[3]!=null){
+    if(textContains("去完成").find()[2]!=null){
         finishIndex = 0;
     }
 }
