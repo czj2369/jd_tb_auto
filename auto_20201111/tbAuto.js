@@ -46,6 +46,13 @@ function clickByDescName(descName){
 
 // 通过文本获取控件并点击
 function clickByTextName(textName){
+    log("进入"+textName+"界面");
+    if(textName == "签到" && textContains("每日签到领喵币")){
+        if(textContains(textName).exists()){
+            textContains(textName).findOne().click();
+        }
+        return;
+    }
     if(textName == "去完成"){
         if(textContains("淘宝特价版").exists() || textContains("邀请好友一起撸猫").exists()){
             if(textContains(textName).find()[finishIndex]!=null){
@@ -56,7 +63,6 @@ function clickByTextName(textName){
         
     }
     if(textContains(textName).exists()){
-        log("进入"+textName+"界面");
         textContains(textName).findOne().click();
     }
     
@@ -67,7 +73,8 @@ function backByFinish(){
     if(textContains("任务完成").exists() || textContains("全部完成啦").exists() ||
     descContains("任务完成").exists() || textContains("任务已完成").exists() ||
     descContains("继续退出").exists() || descContains("全部完成啦").exists() || 
-    textContains("当面分享").exists()){
+    textContains("当面分享").exists() || textContains("当面扫码").exists() || 
+    textContains("请返回重试").exists()){
         log("返回上层");
         back();
     }
