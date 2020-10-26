@@ -1,6 +1,7 @@
 auto.waitFor();
 var appName = "手机淘宝";
 var finishIndex = 0;
+console.show();
 // 建立一个循环，不断的检测里面控件的存在并且做出对应操作
 while(true){
     // 打开淘宝APP
@@ -41,15 +42,18 @@ function clickByDescName(descName){
     if(descContains(descName).exists()){
         log("进入"+descName+"界面");
         descContains(descName).findOne().click();
+        sleep(1500);
     }
 }
 
 // 通过文本获取控件并点击
 function clickByTextName(textName){
-    log("进入"+textName+"界面");
+    
     if(textName == "签到" && textContains("每日签到领喵币")){
         if(textContains(textName).exists()){
             textContains(textName).findOne().click();
+            log("进入"+textName+"界面");
+            sleep(1500);
         }
         return;
     }
@@ -57,6 +61,8 @@ function clickByTextName(textName){
         if(textContains("淘宝特价版").exists() || textContains("邀请好友一起撸猫").exists()){
             if(textContains(textName).find()[finishIndex]!=null){
                 textContains(textName).find()[finishIndex].click();
+                log("进入"+textName+"界面");
+                sleep(1500);
             }
             return;
         }
@@ -64,6 +70,8 @@ function clickByTextName(textName){
     }
     if(textContains(textName).exists()){
         textContains(textName).findOne().click();
+        log("进入"+textName+"界面");
+        sleep(1500);
     }
     
 }
@@ -74,9 +82,10 @@ function backByFinish(){
     descContains("任务完成").exists() || textContains("任务已完成").exists() ||
     descContains("继续退出").exists() || descContains("全部完成啦").exists() || 
     textContains("当面分享").exists() || textContains("当面扫码").exists() || 
-    textContains("请返回重试").exists()){
+    textContains("请返回重试").exists() || textContains("继续逛逛吧").exists()){
         log("返回上层");
         back();
+        sleep(1500);
     }
 }
 
