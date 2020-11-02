@@ -4,7 +4,7 @@ var index = 0;
 console.show();
 // 建立一个循环，不断的检测里面控件的存在并且做出对应操作
 while(true){
-    // 打开淘宝APP
+    // 打开京东APP
     launchApp(appName);
 
     // 点击'全民营业'
@@ -133,25 +133,13 @@ function backByFinish(){
     textContains("商圈红包").exists() || textContains("已集齐").exists() ||
     (textContains("已完成").exists() && textContains("在当前页任意加购5个").exists()) ||
     textContains("豆苗成长值").exists() || textContains("看看好友买什么").exists() ||
-    text("京友圈").exists() || textContains("天天开新").exists() || 
-    textContains("摇京豆").exists()){
+    text("京友圈").exists() || text("天天开新").exists() || 
+    textContains("摇京豆").exists() || textContains("切换相似商品").exists()||
+    text("天天都能领")){
         log("返回上层");
         back();
         sleep(1500)
     }
 }
 
-
-// 判断是否需要将'去完成'的下标修改
-function finishIndexAdd(){
-    if((textContains("淘宝特价版送红包").exists() && textContains("天天签到领红包").exists()) ||
-    textContains("快和我一起撸猫").exists()){
-        if(back()){
-            finishIndex = finishIndex + 1;
-        }
-    }
-    if(textContains("去完成").find()[2]!=null){
-        finishIndex = 0;
-    }
-}
 

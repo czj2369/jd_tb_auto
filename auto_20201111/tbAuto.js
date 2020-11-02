@@ -82,7 +82,8 @@ function backByFinish(){
     descContains("任务完成").exists() || textContains("任务已完成").exists() ||
     descContains("继续退出").exists() || descContains("全部完成啦").exists() || 
     textContains("当面分享").exists() || textContains("当面扫码").exists() || 
-    textContains("请返回重试").exists() || textContains("继续逛逛吧").exists()){
+    textContains("请返回重试").exists() || textContains("继续逛逛吧").exists() ||
+    textContains("了解Ta").exists()){
         log("返回上层");
         back();
         sleep(1500);
@@ -91,13 +92,13 @@ function backByFinish(){
 
 // 判断是否需要将'去完成'的下标修改
 function finishIndexAdd(){
-    if((textContains("淘宝特价版送红包").exists() && textContains("天天签到领红包").exists()) ||
+    if((textContains("淘宝特价版送红包").exists() && textContains("为保证喵币正常发放").exists()) ||
     textContains("快和我一起撸猫").exists()){
         if(back()){
             finishIndex = finishIndex + 1;
         }
     }
-    if(textContains("去完成").find()[2]!=null){
+    if(textContains("去完成").find()[2]!=null || textContains("去完成").find()[1]!=null){
         finishIndex = 0;
     }
 }
