@@ -31,6 +31,8 @@ while(true){
     clickByTextName("去观看");
     // 点击'去完成'
     clickByTextName("去完成");
+    // 点击'去完成'
+    clickByTextName("去逛逛");
     sleep(1500);
     
     backByFinish()
