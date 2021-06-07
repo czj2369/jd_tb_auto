@@ -1,16 +1,37 @@
 // 需要忽略的任务中包含的关键字
-const IGNORE_LIST = ['好友','成功入会','加入战队','参与可得2000金币'];
+const IGNORE_LIST = ['好友','成功入会','加入战队','参与可得2000金币','打怪兽'];
 // 点击之后返回的任务
 const BACK_LIST = ['浏览并关注','逛店可得','成功浏览可得1000金币'];
 // 去完成按钮
 const GO_FINISH = '去完成';
 // 需要做的任务
 const FINISHED_TASK = ['您所访问的页面不存在','全部完成啦',/获得\w+金币/,'已浏览'];
+
+// 正在执行的任务
+var CURRTENT_TASK = '';
+// 判断停留时间
+var JUDGE_TIME = 0;
+// 定时器
+var interval;
 init();
 
 function init() { 
     start();
 
+    // 子线程开启计时
+    threads.start(function(){
+        if (interval == null) {
+            // 开启计时器，进行卡顿计时
+            // 启动定时器前，将计数器归为0
+            JUDGE_TIME = 0;
+            log("开启定时器");
+            interval = setInterval(function(){
+                JUDGE_TIME = JUDGE_TIME + 1;
+                log("此时计数：" + JUDGE_TIME);
+            },1000);
+        }
+    });
+    
     while (true) {
 
         enterActivity();
@@ -18,6 +39,8 @@ function init() {
         viewTask();
 
         addMarketCar();
+
+        recoverApp();
     }
 
     
@@ -28,9 +51,10 @@ function start(){
     auto.waitFor()
     var appName = "京东";
     launchApp(appName);
+    console.show();
 }
 
-// 进入活动中心
+// 进入活动中心 JD这里需要手动进入下活动中心，故没有写代码
 function enterActivity(){
     
     sleep(1000);
@@ -39,7 +63,6 @@ function enterActivity(){
 // 去浏览任务
 function viewTask(){
     if(text(GO_FINISH).exists()) {
-        print(GO_FINISH);
         sleep(500);
         // 获取多个'去完成'
         var button = text(GO_FINISH).find();
@@ -57,6 +80,11 @@ function viewTask(){
                     }
                 });
                 button[index].click();
+
+                // 点击任务 重置计时
+                JUDGE_TIME = 0;
+
+                log("正在进行任务:" + buttonParent.children()[1].text());
                 if(isViewAndFollow){
                     viewAndFollow();
                 }
@@ -95,7 +123,8 @@ function addMarketCar(){
                 }
             }
             if(productList[index].click()) {
-                sleep(1000);
+                log("加入购物车任务:正在添加第" + (index+1) + "个商品");
+                sleep(2000);
                 if(back()){
                     sleep(1000); 
                 }
@@ -126,3 +155,20 @@ function recursionControl(parentControl){
     });
     return retFlag;
 }
+
+function addJudgeTime(){
+   
+}
+
+// 自动判断程序是否卡顿，恢复方法
+// 判断依据：1.不在活动界面 2.停留某个界面长达30s
+function recoverApp(){
+    if (!text(GO_FINISH).exists() && JUDGE_TIME > 30) {
+        if (back()) {
+            // 计时器重置
+            JUDGE_TIME = 0;
+            log("停留某个页面超过30s,自动返回，关闭定时器。");
+        }
+    }
+}
+
