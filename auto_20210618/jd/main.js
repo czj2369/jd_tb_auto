@@ -135,7 +135,7 @@ function addMarketCar(){
 
 }
 
-// 浏览并关注
+// 返回
 function viewAndFollow(){
     sleep(1000);
     back();
@@ -144,8 +144,8 @@ function viewAndFollow(){
 
 // 递归遍历控件是否包含忽略的关键词
 function recursionControl(parentControl){
-    // 控件下是否存在子控件
     var retFlag = false;
+    // 遍历子控件是否包含忽略关键词
     parentControl.children().forEach(element => {
         for(ignoreIndex = 0;ignoreIndex < IGNORE_LIST.length;ignoreIndex++) {
             if(element.text().indexOf(IGNORE_LIST[ignoreIndex]) >= 0) {
