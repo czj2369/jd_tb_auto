@@ -27,7 +27,6 @@ function init() {
             log("开启定时器");
             interval = setInterval(function(){
                 JUDGE_TIME = JUDGE_TIME + 1;
-                log("此时计数：" + JUDGE_TIME);
             },1000);
         }
     });
