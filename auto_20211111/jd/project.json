@@ -1,0 +1,10 @@
+{
+    "name": "jd1111",
+    "main": "main.js",
+    "ignore": [
+        "build"
+    ],
+    "packageName": "com.anjian.jd1111",
+    "versionName": "1.0.0",
+    "versionCode": 1
+}
