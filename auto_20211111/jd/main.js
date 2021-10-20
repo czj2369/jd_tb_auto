@@ -4,6 +4,7 @@ var JUDGE_TIME = 0;
 var interval;
 var x = 878;
 var y = 1242;
+// 设置手机分辨率
 setScreenMetrics(1080, 2400);
 init();
 
