@@ -61,12 +61,13 @@ function start() {
 // 进入做任务界面
 function enterActivity() {
     if (!text("累计任务奖励").exists()) {
+        sleep(4000);
         while (true) {
             if (text("累计任务奖励").exists()) {
                 console.info("打开做任务界面")
                 break;
             } else {
-                click(930, 1591)
+                click(1034, 1658)
             }
             sleep(1000);
         }
@@ -76,7 +77,7 @@ function enterActivity() {
 // 去完成任务
 function viewTask() {
     // 根据坐标点击任务，判断哪些需要进行
-    if (click(x, y)) {
+    if (text("累计任务奖励").exists() && click(x, y)) {
         sleep(2000);
         while (true) {
             if ((textStartsWith("获得").exists() && textEndsWith("汪汪币").exists()) || text("已浏览").exists()) {
@@ -108,8 +109,7 @@ function viewTask() {
                     break;
                 }
                 break;
-            } else if (text("到底了，没有更多了～").exists() && text("累计任务奖励").exists()
-                && !text("消息").exists() && !text("扫啊扫").exists()) {
+            } else if (text("到底了，没有更多了～").exists() && !text("消息").exists() && !text("扫啊扫").exists()) {
                 console.info("到底了，没有更多了～");
                 var dx = 137;
                 var dy = 1831;
@@ -118,19 +118,12 @@ function viewTask() {
                     if (click(dx, dy)) {
                         sleep(2000);
                         if (back()) {
+                            sleep(2000);
                             console.info("浏览任务，点击返回");
                             count = count + 1;
                             if (5 <= count) {
-                                swipe(533, 314, 536, 414, 1);
+                                swipe(807, 314, 807, 414, 1);
                                 sleep(1000);
-                                if (click(930, 1591)) {
-                                    if (text("累计任务奖励").exists() || count == 10) {
-                                        break;
-                                    } else {
-                                        click(930, 1591)
-                                    }
-                                }
-
                             }
                         }
                     }
@@ -164,7 +157,10 @@ function viewTask() {
                         break;
                     }
                 }
-            } else {
+            } else if (text('京东11.11热爱环...').exists()) {
+                console.info("下单任务，跳过");
+                back();
+            }else {
                 if (recoverApp()) {
                     break;
                 }
@@ -179,6 +175,7 @@ function viewTask() {
 function addMarketCar() {
     if (textContains('当前页点击浏览5个').exists() || textContains('当前页浏览加购').exists()) {
         const productList = className('android.view.View').indexInParent(5).clickable().find();
+        //const productList = className('android.widget.Button').depth(19).clickable().find()
         var count = 0;
         for (index = 0; index < productList.length; index++) {
             if (count == 5) {
@@ -193,7 +190,7 @@ function addMarketCar() {
                 sleep(2000);
                 if (back()) {
                     count = count + 1;
-                    sleep(1000);
+                    sleep(2000);
                 }
             }
         }

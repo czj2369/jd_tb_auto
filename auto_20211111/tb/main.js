@@ -8,7 +8,7 @@
  */
 
 // 需要忽略的任务中包含的关键字
-var IGNORE_LIST = ['芭芭农场','下单','蚂蚁','淘特','小互动','点淘','充话费','参与合伙'];
+var IGNORE_LIST = ['农场', '芭芭农场','下单','蚂蚁','淘特','小互动','点淘','充话费','参与合伙'];
 // 点击之后返回的任务
 const BACK_LIST = [];
 const GO_View = '去浏览';
@@ -37,8 +37,9 @@ function init() {
 // 启动淘宝
 function start(){
     auto.waitFor()
-    var appName = "手机淘宝";
-    launchApp(appName);
+    var appName = "com.taobao.taobao";
+    launch(appName);
+    console.info("启动淘宝APP");
     console.show();
 }
 
@@ -47,9 +48,11 @@ function enterActivity(){
     const GET_MIAO = '领喵币';
     const SIGN_IN = '签到';
     const GET_REWARD = '领取奖励';
-    const CUT_TEN_BILION = '瓜分10亿';
-    if (text(GET_MIAO).exists()){
-        text(GET_MIAO).findOne().click();
+    const CUT_TEN_BILION = '赚喵糖';
+    if (className('android.widget.FrameLayout').depth(17).indexInParent(14).clickable().find().length == 1){
+        console.info("进入喵糖总动员")
+        var button = className('android.widget.FrameLayout').depth(17).indexInParent(14).clickable().find()[0].bounds();
+        click(button.centerX(), button.centerY());
     }
 
     // 签到
@@ -64,7 +67,8 @@ function enterActivity(){
 
     // 进入活动中心
     if(text(CUT_TEN_BILION).exists()) {
-        text(CUT_TEN_BILION).findOnce().parent().click();
+        var button =  text(CUT_TEN_BILION).findOnce().bounds();
+        click(button.centerX(), button.centerY());
     }
 }
 
