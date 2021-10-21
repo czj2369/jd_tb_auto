@@ -109,7 +109,8 @@ function viewTask() {
                     break;
                 }
                 break;
-            } else if (text("到底了，没有更多了～").exists() && !text("消息").exists() && !text("扫啊扫").exists()) {
+            } else if (text("到底了，没有更多了～").exists() && !text("消息").exists() && !text("扫啊扫").exists()
+            && !(textStartsWith("完成").exists() && textEndsWith("次").exists())) {
                 console.info("到底了，没有更多了～");
                 var dx = 137;
                 var dy = 1831;
