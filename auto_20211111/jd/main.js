@@ -2,7 +2,7 @@
  * JD双11赚汪汪币
  * 
  * Author: czj
- * Date: 2021/11/11
+ * Date: 2021/10/20
  * Time: 23:02:50
  * Versions: 1.1.0
  * Github: https://github.com/czj2369/jd_tb_auto
@@ -241,8 +241,7 @@ function recoverApp() {
 
 /**
  * Author: czj
- * Date: 2021/11/11
+ * Date: 2021/10/20
  * Time: 23:02:50
- * Versions: 1.1.0
  * Github: https://github.com/czj2369/jd_tb_auto
  */
