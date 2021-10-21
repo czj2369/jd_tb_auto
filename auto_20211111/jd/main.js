@@ -39,11 +39,13 @@ function init() {
     while (true) {
         enterActivity();
 
+        recoverApp();
+
         viewTask();
 
         addMarketCar();
 
-        recoverApp();
+        
     }
 
 
@@ -65,9 +67,11 @@ function enterActivity() {
         while (true) {
             if (text("累计任务奖励").exists()) {
                 console.info("打开做任务界面")
+                sleep(1000);
                 break;
             } else {
-                click(1034, 1658)
+                click(1034, 1658);
+                sleep(1000);
             }
             sleep(1000);
         }
@@ -78,6 +82,7 @@ function enterActivity() {
 function viewTask() {
     // 根据坐标点击任务，判断哪些需要进行
     if (text("累计任务奖励").exists() && click(x, y)) {
+        console.info("点击坐标为",x,",",y);
         sleep(2000);
         while (true) {
             if ((textStartsWith("获得").exists() && textEndsWith("汪汪币").exists()) || text("已浏览").exists()) {
@@ -121,6 +126,9 @@ function viewTask() {
                         if (back()) {
                             sleep(2000);
                             console.info("浏览任务，点击返回");
+                            if (text("消息").exists() && text("扫啊扫").exists()) {
+                                break;
+                            }
                             count = count + 1;
                             if (5 <= count) {
                                 swipe(807, 314, 807, 414, 1);
@@ -129,6 +137,7 @@ function viewTask() {
                         }
                     }
                 }
+                break;
             } else if (text("消息").exists() && text("扫啊扫").exists()) {
                 console.warn("因为某些原因回到首页，重新进入活动界面");
                 while (true) {
@@ -207,6 +216,7 @@ function interactionGrassPlanting() {
             console.info("去逛逛");
             sleep(2000);
             if (back()) {
+                sleep(2000);
                 count = count + 1;
                 if (count == 5) {
                     return true;
