@@ -8,7 +8,7 @@
  */
 
 // 需要忽略的任务中包含的关键字
-var IGNORE_LIST = ['农场', '芭芭农场','下单','蚂蚁','淘特','小互动','点淘','充话费','参与合伙'];
+var IGNORE_LIST = ['农场', '芭芭农场','下单','蚂蚁','淘特','小互动','点淘','充话费','参与合伙', '喂小鸡'];
 // 点击之后返回的任务
 const BACK_LIST = [];
 const GO_View = '去浏览';
@@ -48,7 +48,7 @@ function enterActivity(){
     const GET_MIAO = '领喵币';
     const SIGN_IN = '签到';
     const GET_REWARD = '领取奖励';
-    const CUT_TEN_BILION = '赚喵糖';
+    const CUT_TEN_BILION = '赚糖';
     if (className('android.widget.FrameLayout').depth(17).indexInParent(14).clickable().find().length == 1){
         console.info("进入喵糖总动员")
         var button = className('android.widget.FrameLayout').depth(17).indexInParent(14).clickable().find()[0].bounds();
@@ -66,8 +66,8 @@ function enterActivity(){
     }
 
     // 进入活动中心
-    if(text(CUT_TEN_BILION).exists()) {
-        var button =  text(CUT_TEN_BILION).findOnce().bounds();
+    if(textContains(CUT_TEN_BILION).exists()) {
+        var button =  textContains(CUT_TEN_BILION).findOnce().bounds();
         click(button.centerX(), button.centerY());
     }
 }
