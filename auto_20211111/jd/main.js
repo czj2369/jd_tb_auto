@@ -8,16 +8,21 @@
  * Github: https://github.com/czj2369/jd_tb_auto
  */
 
+// 需要完成的任务列表
+var TASK_LIST = ["浏览并关注", "浏览8s", "累计浏览", "参与城城", "浏览可得", "去首页浮层进入"];
+
 // 判断停留时间
 var JUDGE_TIME = 0;
 // 定时器
 var interval;
-var x = 878;
-var y = 1242;
-// 设置手机分辨率
-var screenXY = dialogs.rawInput("请设置分辨率(逗号隔开，width,height)", "1080, 2400")
-setScreenMetrics(screenXY.split(",")[0], screenXY.split(",")[1]);
-console.log("设置手机分辨率为：" + screenXY);
+// 已完成序号
+var finished_task_num = new Array();
+// 当前序号
+var current_task_num = 0;
+// 浏览就返回标记
+var isBackFlag = false;
+var huodong_indexInParent_num = 9;
+
 init();
 
 function init() {
@@ -41,11 +46,13 @@ function init() {
 
         recoverApp();
 
-        viewTask();
+        var flag = getNeedSelector();
+
+        viewTask(flag);
 
         addMarketCar();
 
-        
+
     }
 
 
@@ -55,8 +62,9 @@ function init() {
 function start() {
     auto.waitFor()
     var appName = "com.jingdong.app.mall";
-    launch(appName);
-    console.info("启动京东APP");
+    if (launch(appName)) {
+        console.info("启动京东APP");
+    }
     console.show();
 }
 
@@ -66,12 +74,37 @@ function enterActivity() {
         sleep(4000);
         while (true) {
             if (text("累计任务奖励").exists()) {
-                console.info("打开做任务界面")
+                console.info("已经在任务界面");
                 sleep(1000);
                 break;
             } else {
-                click(1034, 1658);
-                sleep(1000);
+                if (desc("浮层活动").exists()) {
+                    console.info("点击浮层活动");
+                    var huodong = desc("浮层活动").findOne().bounds();
+                    randomClick(huodong.centerX(), huodong.centerY());
+                    sleep(1000);
+                    break;
+                }
+
+                // 获取进入做任务界面的控件
+                var button = className('android.view.View')
+                    .depth(14)
+                    .indexInParent(huodong_indexInParent_num)
+                    .drawingOrder(0)
+                    .clickable();
+                if (button.exists()) {
+                    console.info("点击进入做任务界面")
+                    var rect = button.findOne().bounds();
+                    randomClick(rect.centerX(), rect.centerY());
+                    sleep(1000);
+                    break;
+                } else {
+                    huodong_indexInParent_num = huodong_indexInParent_num + 1;
+                    if (huodong_indexInParent_num == 16) {
+                        console.info("无法自动进入做任务界面，请手动进入！");
+                        break;
+                    }
+                }
             }
             sleep(1000);
         }
@@ -79,104 +112,145 @@ function enterActivity() {
 }
 
 // 去完成任务
-function viewTask() {
+function viewTask(flag) {
     // 根据坐标点击任务，判断哪些需要进行
-    if (text("累计任务奖励").exists() && click(x, y)) {
-        console.info("点击坐标为",x,",",y);
-        sleep(2000);
-        while (true) {
-            if ((textStartsWith("获得").exists() && textEndsWith("汪汪币").exists()) || text("已浏览").exists()) {
-                console.info("任务完成，返回");
-                viewAndFollow();
-                // 重置计时
-                JUDGE_TIME = 0;
+    sleep(2000);
+    while (true && flag) {
+        if ((textStartsWith("获得").exists() && textEndsWith("汪汪币").exists()) || text("已浏览").exists()) {
+            console.info("任务完成，返回");
+            viewAndFollow();
+            // 重置计时
+            JUDGE_TIME = 0;
+            break;
+        } else if (text("任务已达上限").exists()) {
+            console.info("任务已达上限,切换已完成按钮");
+            // 将当前任务序号添加到列表中，防止后续点到
+            finished_task_num[finished_task_num.length] = current_task_num;
+            viewAndFollow();
+            // 重置计时
+            JUDGE_TIME = 0;
+            break;
+        } else if (textContains('会员授权协议').exists()) {
+            console.info("不授权加入会员，切换已完成按钮");
+            // 将当前任务序号添加到列表中，防止后续点到
+            finished_task_num[finished_task_num.length] = current_task_num;
+            viewAndFollow();
+            // 重置计时
+            JUDGE_TIME = 0;
+            break;
+        } else if (textContains('当前页点击浏览5个').exists() || textContains('当前页浏览加购').exists()) {
+            console.info("当前为加入购物车任务");
+            // 重置计时
+            JUDGE_TIME = 0;
+            break;
+        } else if (text("互动种草城").exists()) {
+            console.info("当前为互动种草城任务");
+            // 重置计时
+            JUDGE_TIME = 0;
+            if (interactionGrassPlanting()) {
                 break;
-            } else if (text("任务已达上限").exists()) {
-                console.info("任务已达上限,切换已完成按钮");
-                y = y + 250;
-                viewAndFollow();
-                // 重置计时
-                JUDGE_TIME = 0;
-                break;
-            } else if (textContains('会员授权协议').exists()) {
-                console.info("不授权加入会员，切换已完成按钮");
-                y = y + 250;
-                viewAndFollow();
-                // 重置计时
-                JUDGE_TIME = 0;
-                break;
-            } else if (textContains('当前页点击浏览5个').exists() || textContains('当前页浏览加购').exists()) {
-                console.info("当前为加入购物车任务");
-                break;
-            } else if (text("互动种草城").exists()) {
-                console.info("当前为互动种草城任务");
-                if (interactionGrassPlanting()) {
-                    break;
-                }
-                break;
-            } else if (text("到底了，没有更多了～").exists() && !text("消息").exists() && !text("扫啊扫").exists()
-            && !(textStartsWith("完成").exists() && textEndsWith("次").exists())) {
-                console.info("到底了，没有更多了～");
-                var dx = 137;
-                var dy = 1831;
-                var count = 0;
-                while (true) {
-                    if (click(dx, dy)) {
-                        sleep(2000);
-                        if (back()) {
-                            sleep(2000);
-                            console.info("浏览任务，点击返回");
-                            if (text("消息").exists() && text("扫啊扫").exists()) {
-                                break;
-                            }
-                            count = count + 1;
-                            if (5 <= count) {
-                                swipe(807, 314, 807, 414, 1);
-                                sleep(1000);
-                            }
-                        }
-                    }
-                }
-                break;
-            } else if (text("消息").exists() && text("扫啊扫").exists()) {
-                console.warn("因为某些原因回到首页，重新进入活动界面");
-                while (true) {
-                    if (text("做任务赚汪汪币").exists()) {
-                        console.info("进入活动界面")
-                        break;
-                    } else {
-                        click(1057, 1673)
-                    }
-                    sleep(1000);
-                }
-            } else if (text("天天都能领").exists()) {
-                if (click(580, 1600)) {
-                    sleep(1000);
-                    if (click(580, 1600)) {
-                        console.log("点我收下");
-                        if (back()) {
-                            break;
-                        }
-                    }
-                }
-            } else if (text("邀请新朋友 更快赚现金").exists()) {
-                if (click(960, 380)) {
-                    if (click(580, 1600)) {
-                        console.log("点我收下");
-                        back();
+            }
+            break;
+        } else if (text("到底了，没有更多了～").exists() && !text("消息").exists() && !text("扫啊扫").exists()
+            && !(textStartsWith("当前进度").exists() && textEndsWith("10").exists())) {
+            console.info("到底了，没有更多了～");
+            // 重置计时
+            JUDGE_TIME = 0;
+            var count = 0;
+            var button = className('android.view.View')
+                .depth(19)
+                .indexInParent(32)
+                .drawingOrder(0)
+                .clickable();
+            while (true && button.exists()) {
+                if (button.findOne().click()) {
+                    sleep(2000);
+                    console.info("浏览任务，点击返回");
+                    if (text("消息").exists() && text("扫啊扫").exists()) {
                         break;
                     }
-                }
-            } else if (text('京东11.11热爱环...').exists()) {
-                console.info("下单任务，跳过");
-                back();
-            }else {
-                if (recoverApp()) {
+                    count = count + 1;
+                    if (5 <= count) {
+                        swipe(807, 314, 807, 414, 1);
+                        sleep(1000);
+                    }
+                } else {
                     break;
                 }
             }
+            break;
+        } else if (text("消息").exists() && text("扫啊扫").exists()) {
+            console.warn("因为某些原因回到首页，重新进入活动界面");
+            enterActivity();
+        } else if (text("天天都能领").exists()) {
+            sleep(2000);
+            console.info("天天都能领");
+            // 重置计时
+            JUDGE_TIME = 0;
+            var button = className('android.view.View')
+                .depth(16)
+                .indexInParent(3)
+                .drawingOrder(0)
+                .clickable().findOne().bounds();
+            if (randomClick(button.centerX(), button.centerY())) {
+                sleep(1000);
+                console.log("点我收下");
+                if (back()) {
+                    break;
+                }
+            }
+        } else if (text("邀请新朋友 更快赚现金").exists()) {
+            sleep(2000);
+            console.info("邀请新朋友");
+            // 重置计时
+            JUDGE_TIME = 0;
+            var buttonList = className('android.view.View')
+                .depth(16)
+                .indexInParent(2)
+                .drawingOrder(0)
+                .clickable().find();
+            var button;
+            for (let index = 0; index < buttonList.length; index++) {
+                if (buttonList[index].bounds().centerY() < 400) {
+                    button = buttonList[index];
+                }
+            }
+            if (randomClick(button.bounds().centerX(), button.bounds().centerY())) {
+                console.info("点击取消");
+                var buttonList2 = className('android.view.View')
+                    .depth(16)
+                    .indexInParent(1)
+                    .drawingOrder(0)
+                    .clickable().find();
+                var button2;
+                for (let index = 0; index < buttonList2.length; index++) {
+                    if (buttonList2[index].bounds().centerY() > 1400) {
+                        button2 = buttonList2[index];
+                    }
+                }
+                if (randomClick(button2.bounds().centerX(), button2.bounds().centerY())) {
+                    sleep(2000);
+                    console.log("点我收下");
+                    if (back()) {
+                        break;
+                    }
+                }
+            }
+            break;
+        } else if (text('京东11.11热爱环...').exists()) {
+            console.info("下单任务，跳过");
+            back();
+        } else if (isBackFlag) {
+            console.info("进入浏览就返回任务");
+            sleep(2000);
+            viewAndFollow();
+            isBackFlag = false;
+            break;
+        } else {
+            if (recoverApp()) {
+                break;
+            }
         }
-
     }
 
 }
@@ -212,7 +286,7 @@ function addMarketCar() {
 function interactionGrassPlanting() {
     var count = 0;
     while (true) {
-        if (click(850, 430)) {
+        if (randomClick(850, 430)) {
             console.info("去逛逛");
             sleep(2000);
             if (back()) {
@@ -224,7 +298,45 @@ function interactionGrassPlanting() {
             }
         }
     }
-    
+
+}
+
+// 获取需要进行的控件
+function getNeedSelector() {
+    var allSelector = className('android.view.View')
+        .depth(19)
+        .indexInParent(3)
+        .drawingOrder(0)
+        .clickable()
+        .find();
+
+    for (let index = 0; index < allSelector.length; index++) {
+        for (var i = 0; i < TASK_LIST.length; i++) {
+            // 获取具有需要完成任务字符串的控件集合
+            var list = allSelector[index].parent().findByText(TASK_LIST[i]);
+            // 如果长度大于0则表示存在该控件
+            if (list.size() > 0) {
+                // 获取不在序列中的序号
+                if (finished_task_num.indexOf(index) < 0) {
+                    console.info("当前已完成序列：", finished_task_num)
+                    current_task_num = index;
+                } else {
+                    continue;
+                }
+
+                // 如果是浏览就返回的任务，将标记设为true
+                isBackFlag = (TASK_LIST[i].indexOf("浏览可得") >= 0 || TASK_LIST[i].indexOf("浏览并关注可得2000") >= 0) ? true : false;
+
+                var rect = allSelector[current_task_num].bounds();
+                if (text("累计任务奖励").exists()) {
+                    console.info("去完成任务，当前任务序列：", current_task_num)
+                    randomClick(rect.centerX(), rect.centerY());
+                    //console.info("开始任务:", allSelector[current_task_num].parent().findByText(TASK_LIST[i]).get(0).text());
+                    return true;
+                }
+            }
+        }
+    }
 }
 
 // 返回
@@ -244,7 +356,22 @@ function recoverApp() {
             console.warn("停留某个页面超过30s,自动返回，重置定时器。");
             return true;
         }
+    }else{
+        return false;
     }
+}
+
+/**
+ * 点击
+ * @param {横坐标} x 
+ * @param {纵坐标} y 
+ */
+function randomClick(x, y) {
+    var rx = random(0, 5);
+    var ry = random(0, 5);
+
+    click(x + rx, y + ry);
+    return true;
 }
 
 /**
