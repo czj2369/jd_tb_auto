@@ -25,6 +25,9 @@ var huodong_indexInParent_num = 9;
 
 init();
 
+/**
+ * 初始化
+ */
 function init() {
     start();
 
@@ -52,13 +55,14 @@ function init() {
 
         addMarketCar();
 
-
     }
 
 
 }
 
-// 启动京东
+/**
+ * 启动京东
+ */
 function start() {
     auto.waitFor()
     var appName = "com.jingdong.app.mall";
@@ -68,50 +72,54 @@ function start() {
     console.show();
 }
 
-// 进入做任务界面
+/**
+ * 进入做任务界面
+ */
 function enterActivity() {
     if (!text("累计任务奖励").exists()) {
         sleep(4000);
-        while (true) {
-            if (text("累计任务奖励").exists()) {
-                console.info("已经在任务界面");
-                sleep(1000);
-                break;
-            } else {
-                if (desc("浮层活动").exists()) {
-                    console.info("点击浮层活动");
-                    var huodong = desc("浮层活动").findOne().bounds();
-                    randomClick(huodong.centerX(), huodong.centerY());
-                    sleep(1000);
-                    break;
-                }
+        if (text("累计任务奖励").exists()) {
+            console.info("已经在任务界面");
+            sleep(1000);
 
-                // 获取进入做任务界面的控件
-                var button = className('android.view.View')
-                    .depth(14)
-                    .indexInParent(huodong_indexInParent_num)
-                    .drawingOrder(0)
-                    .clickable();
-                if (button.exists()) {
-                    console.info("点击进入做任务界面")
-                    var rect = button.findOne().bounds();
-                    randomClick(rect.centerX(), rect.centerY());
-                    sleep(1000);
-                    break;
-                } else {
-                    huodong_indexInParent_num = huodong_indexInParent_num + 1;
-                    if (huodong_indexInParent_num == 16) {
-                        console.info("无法自动进入做任务界面，请手动进入！");
-                        break;
-                    }
+        } else {
+            if (desc("浮层活动").exists()) {
+                console.info("点击浮层活动");
+                var huodong = desc("浮层活动").findOne().bounds();
+                randomClick(huodong.centerX(), huodong.centerY());
+                sleep(1000);
+
+            }
+
+            // 获取进入做任务界面的控件
+            var button = className('android.view.View')
+                .depth(14)
+                .indexInParent(huodong_indexInParent_num)
+                .drawingOrder(0)
+                .clickable();
+            if (button.exists()) {
+                console.info("点击进入做任务界面")
+                var rect = button.findOne().bounds();
+                randomClick(rect.centerX(), rect.centerY());
+                sleep(1000);
+
+            } else {
+                huodong_indexInParent_num = huodong_indexInParent_num + 1;
+                if (huodong_indexInParent_num == 16) {
+                    console.info("无法自动进入做任务界面，请手动进入！");
+                    huodong_indexInParent_num = 9;
+
                 }
             }
-            sleep(1000);
         }
+        sleep(1000);
     }
 }
 
-// 去完成任务
+/**
+ * 去完成任务
+ * @param {是否点击任务标识} flag 
+ */
 function viewTask(flag) {
     // 根据坐标点击任务，判断哪些需要进行
     sleep(2000);
@@ -255,7 +263,9 @@ function viewTask(flag) {
 
 }
 
-// 加入购物车
+/**
+ * 加入购物车
+ */
 function addMarketCar() {
     if (textContains('当前页点击浏览5个').exists() || textContains('当前页浏览加购').exists()) {
         const productList = className('android.view.View').indexInParent(5).clickable().find();
@@ -272,9 +282,12 @@ function addMarketCar() {
             if (productList[index].click()) {
                 log("加入购物车任务:正在添加第" + (index + 1) + "个商品");
                 sleep(2000);
-                if (back()) {
-                    count = count + 1;
-                    sleep(2000);
+                while (true) {
+                    if (text("购物车").exists() && back()) {
+                        count = count + 1;
+                        sleep(2000);
+                        break;
+                    }
                 }
             }
         }
@@ -282,7 +295,10 @@ function addMarketCar() {
 
 }
 
-// 互动种草城
+/**
+ * 互动种草城
+ * @returns 
+ */
 function interactionGrassPlanting() {
     var count = 0;
     while (true) {
@@ -301,7 +317,10 @@ function interactionGrassPlanting() {
 
 }
 
-// 获取需要进行的控件
+/**
+ * 获取需要进行的控件
+ * @returns 
+ */
 function getNeedSelector() {
     var allSelector = className('android.view.View')
         .depth(19)
@@ -339,15 +358,20 @@ function getNeedSelector() {
     }
 }
 
-// 返回
+/**
+ * 返回
+ */
 function viewAndFollow() {
     sleep(1000);
     back();
     sleep(1000);
 }
 
-// 自动判断程序是否卡顿，恢复方法
-// 判断依据：1.不在活动界面 2.停留某个界面长达30s
+/**
+ * 自动判断程序是否卡顿，恢复方法
+ * 判断依据：1.不在活动界面 2.停留某个界面长达30s
+ * @returns 
+ */
 function recoverApp() {
     if (!text("累计任务奖励").exists() && JUDGE_TIME > 30) {
         if (back()) {
@@ -356,7 +380,7 @@ function recoverApp() {
             console.warn("停留某个页面超过30s,自动返回，重置定时器。");
             return true;
         }
-    }else{
+    } else {
         return false;
     }
 }
@@ -371,6 +395,7 @@ function randomClick(x, y) {
     var ry = random(0, 5);
 
     click(x + rx, y + ry);
+    sleep(2000);
     return true;
 }
 
