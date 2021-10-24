@@ -8,7 +8,7 @@
  */
 
 // 需要忽略的任务中包含的关键字
-var IGNORE_LIST = ['农场', '芭芭农场', '下单', '蚂蚁森林', '淘特', '点淘', '充话费', '参与合伙', '喂小鸡', '斗地主'];
+var IGNORE_LIST = ['农场', '芭芭农场', '下单', '蚂蚁森林', '淘特', '点淘', '充话费', '参与合伙', '喂小鸡', '斗地主', '续卡'];
 // 点击之后返回的任务
 const BACK_LIST = [];
 const GO_View = '去浏览';
@@ -143,6 +143,8 @@ function enterMiaoTang() {
         var button = className('android.widget.FrameLayout').depth(17).indexInParent(14).clickable().find()[0].bounds();
         click(button.centerX(), button.centerY());
         isEnterTaskUI = true;
+        sleep(5000);
+        return true;
     }else {
         if (desc("我的淘宝").exists() && desc("我的淘宝").findOne().click()) {
             sleep(3000);
