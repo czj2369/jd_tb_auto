@@ -75,9 +75,9 @@
 
 3.<a id="下载地址">apk下载地址</a>
 
-​	[TB](http://39.99.227.166:8080/download/tb1111)
+​	<a href="http://39.99.227.166:8080/download/tb1111">TB</a>
 
-​	[JD](http://39.99.227.166:8080/download/jd1111)
+​	<a href="http://39.99.227.166:8080/download/jd1111">JD</a>
 
 # ~~重要说明~~
 
