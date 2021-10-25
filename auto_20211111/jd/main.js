@@ -4,7 +4,7 @@
  * Author: czj
  * Date: 2021/10/20
  * Time: 23:02:50
- * Versions: 1.5.0
+ * Versions: 1.6.0
  * Github: https://github.com/czj2369/jd_tb_auto
  */
 
@@ -29,6 +29,19 @@ init();
  * 初始化
  */
 function init() {
+
+    // 子线程监听脚本
+    threads.start(function () {
+        events.setKeyInterceptionEnabled("volume_up", true);
+        //启用按键监听
+        events.observeKey();
+        //监听音量上键按下
+        events.onKeyDown("volume_up", function (event) {
+            console.log("脚本退出!")
+            exit();
+        });
+    });
+
     start();
 
     // 子线程开启计时
@@ -239,7 +252,12 @@ function viewTask(flag) {
                 if (randomClick(button2.bounds().centerX(), button2.bounds().centerY())) {
                     sleep(2000);
                     console.log("点我收下");
-                    if (back()) {
+                    var cancelButton = className('android.view.View')
+                        .depth(4)
+                        .indexInParent(1)
+                        .drawingOrder(2)
+                        .clickable().findOne();
+                    if (cancelButton.click() || back()) {
                         break;
                     }
                 }
@@ -274,7 +292,7 @@ function addMarketCar() {
         for (index = 0; index < productList.length; index++) {
             if (count == 5) {
                 if (back()) {
-                    sleep(1000)
+                    sleep(3000)
                     count = 0;
                     break;
                 }
@@ -286,7 +304,9 @@ function addMarketCar() {
                     if (text("购物车").exists() && back()) {
                         count = count + 1;
                         sleep(2000);
-                        break;
+                        if (!text("购物车").exists()) {
+                            break;
+                        }
                     }
                 }
             }
@@ -364,7 +384,7 @@ function getNeedSelector() {
 function viewAndFollow() {
     sleep(1000);
     back();
-    sleep(1000);
+    sleep(3000);
 }
 
 /**

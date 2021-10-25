@@ -3,12 +3,12 @@
  * 
  * Author: czj
  * Date: 2021/10/21 13:01:32
- * Versions: 1.2.0
+ * Versions: 1.3.0
  * Github: https://github.com/czj2369/jd_tb_auto
  */
 
 // 需要忽略的任务中包含的关键字
-var IGNORE_LIST = ['农场', '芭芭农场', '下单', '蚂蚁森林', '淘特', '点淘', '充话费', '参与合伙', '喂小鸡', '斗地主', '续卡'];
+var IGNORE_LIST = ['农场', '芭芭农场', '下单', '蚂蚁森林', '淘特', '点淘', '充话费', '参与合伙', '喂小鸡', '斗地主', '续卡', '88VIP'];
 // 点击之后返回的任务
 const BACK_LIST = [];
 const GO_View = '去浏览';
@@ -26,9 +26,9 @@ var interval;
 
 var options = ["做任务", "掷骰子"];
 var i = dialogs.select("请选择一个选项", options);
-if(i >= 0){
+if (i >= 0) {
     console.info("您选择的是" + options[i]);
-}else{
+} else {
     toast("您取消了选择");
 }
 
@@ -38,6 +38,18 @@ init();
  * 初始化
  */
 function init() {
+    // 子线程监听脚本
+    threads.start(function () {
+        events.setKeyInterceptionEnabled("volume_up", true);
+        //启用按键监听
+        events.observeKey();
+        //监听音量上键按下
+        events.onKeyDown("volume_up", function (event) {
+            console.log("脚本退出!")
+            exit();
+        });
+    });
+
     start();
 
     // 子线程开启计时
@@ -57,15 +69,15 @@ function init() {
         while (true) {
 
             recoverApp();
-    
+
             enterActivity();
-    
+
             viewTask();
-    
+
             transitioPperation();
         }
-    }else{
-        while(!enterMiaoTang() && !textContains("骰子").exists()) {
+    } else {
+        while (!enterMiaoTang() && !textContains("骰子").exists()) {
 
         }
         var textContent = textContains("骰子").findOnce().text();
@@ -81,6 +93,7 @@ function init() {
             }
         }
         console.info("掷骰子任务结束");
+        exit();
     }
 }
 
@@ -90,12 +103,12 @@ function init() {
 function start() {
     auto.waitFor()
     var appName = "com.taobao.taobao";
-    if (launch(appName)){
+    if (launch(appName)) {
         console.info("启动淘宝APP");
-    }else{
+    } else {
         console.info("请手动启动淘宝APP")
     }
-    
+
     console.show();
 }
 
@@ -128,7 +141,7 @@ function enterActivity() {
         if (back()) {
             isEnterTaskUI = false;
         }
-        
+
     }
     return false;
 }
@@ -145,13 +158,13 @@ function enterMiaoTang() {
         isEnterTaskUI = true;
         sleep(5000);
         return true;
-    }else {
+    } else {
         if (desc("我的淘宝").exists() && desc("我的淘宝").findOne().click()) {
             sleep(3000);
             if (descContains("赢20亿红包").exists() && descContains("赢20亿红包").findOne().click()) {
-                console.info("进入喵糖总动员,稍等5s即刻开始任务");
+                console.info("进入喵糖总动员,稍等7s即刻开始任务");
                 isEnterTaskUI = true;
-                sleep(5000);
+                sleep(7000);
                 return true;
             }
         }
@@ -182,13 +195,13 @@ function viewTask() {
                             }
                         }
                     });
-                    
+
                     log("正在进行任务:" + buttonParent.child(0).children()[0].text());
 
                     if (isViewAndFollow) {
                         viewAndFollow();
                     }
-    
+
                     button[index].click();
                     sleep(4000);
                     if (id("titlebar").exists()) {
@@ -255,7 +268,7 @@ function customBack() {
  * 互动任务
  */
 function huDong() {
-    if(id("titlebar").exists()) {
+    if (id("titlebar").exists()) {
         console.info("进入互动任务");
         var titleBarXY = id("titlebar").findOne().bounds();
         var x = titleBarXY.centerX();
@@ -263,14 +276,14 @@ function huDong() {
 
         while (!textContains("执行").exists() && click(x, y)) {
             console.info("未点击到任务，重试");
-            y = y+50;
+            y = y + 50;
         }
 
         y = titleBarXY.centerY();
 
         while (textContains("喵糖+1").exists() && textContains("执行").exists() && click(x, y)) {
             console.info("点击屏幕");
-            y = y+50;
+            y = y + 50;
         }
 
     }
