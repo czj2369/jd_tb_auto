@@ -77,7 +77,7 @@
 
 # 其他
 
-1.测试手机型号：Redmi K40
+1.测试手机型号：Redmi K40,Redmi Note 4X
 
 2.JD版本：9.2.0，TB版本：10.5.0
 
@@ -86,6 +86,8 @@
 ​	<a href="http://39.99.227.166:8080/download/tb1111" target="_blank">TB</a>
 
 ​	<a href="http://39.99.227.166:8080/download/jd1111" target="_blank">JD</a>
+
+​	<a href="https://github.com/czj2369/jd_tb_auto/releases" target="_blank">releases</a>
 
 # ~~重要说明~~
 
