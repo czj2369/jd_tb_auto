@@ -4,13 +4,14 @@
  * Author: czj
  * Date: 2021/10/20
  * Time: 23:02:50
- * Versions: 1.6.0
+ * Versions: 1.7.0
  * Github: https://github.com/czj2369/jd_tb_auto
  */
 
 // 需要完成的任务列表
-var TASK_LIST = ["浏览并关注", "浏览8s", "累计浏览", "参与城城", "浏览可得", "去首页浮层进入"];
-
+var TASK_LIST = ["浏览并关注", "浏览8s", "累计浏览", "浏览可得", "去首页浮层进入"];
+// 过渡操作
+var PASS_LIST = ['请选择要使用的应用','我知道了'];
 // 判断停留时间
 var JUDGE_TIME = 0;
 // 定时器
@@ -58,6 +59,9 @@ function init() {
     });
 
     while (true) {
+
+        transitioPperation();
+
         enterActivity();
 
         recoverApp();
@@ -118,7 +122,7 @@ function enterActivity() {
 
             } else {
                 huodong_indexInParent_num = huodong_indexInParent_num + 1;
-                if (huodong_indexInParent_num == 16) {
+                if (huodong_indexInParent_num == 10) {
                     console.info("无法自动进入做任务界面，请手动进入！");
                     huodong_indexInParent_num = 9;
 
@@ -402,6 +406,23 @@ function recoverApp() {
         }
     } else {
         return false;
+    }
+}
+
+/**
+ * 过渡操作
+ */
+ function transitioPperation() {
+    for (let index = 0; index < PASS_LIST.length; index++) { 
+        if (text(PASS_LIST[index]).exists()) {
+            if (PASS_LIST[index].indexOf("请选择要使用的应用") >= 0) {
+                back();
+            }else{
+                text(PASS_LIST[index]).click();
+                console.info("过渡操作：", PASS_LIST[index]);
+            }
+            sleep(500);
+        }
     }
 }
 

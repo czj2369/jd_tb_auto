@@ -3,18 +3,24 @@
  * 
  * Author: czj
  * Date: 2021/10/21 13:01:32
- * Versions: 1.3.0
+ * Versions: 1.4.0
  * Github: https://github.com/czj2369/jd_tb_auto
  */
 
 // 需要忽略的任务中包含的关键字
 var IGNORE_LIST = ['农场', '芭芭农场', '下单', '蚂蚁森林', '淘特', '点淘', '充话费', '参与合伙', '喂小鸡', '斗地主', '续卡', '88VIP'];
+// 过渡操作
+var PASS_LIST = ['我再想想', '我知道了', '开心收下'];
+
+var app_package = "com.taobao.taobao";
+var app_name = "淘宝";
+
 // 点击之后返回的任务
 const BACK_LIST = [];
 const GO_View = '去浏览';
 const GO_FINISH = '去完成';
 const GO_SEARCH = '去搜索';
-// 需要做的任务
+// 返回标记
 const FINISHED_TASK = ['任务完成', '全部完成啦', '喵糖已发放', '任务已完成'];
 const VIEW_MOST = '去逛逛';
 // 判定是否进入到喵糖总动员
@@ -102,11 +108,11 @@ function init() {
  */
 function start() {
     auto.waitFor()
-    var appName = "com.taobao.taobao";
-    if (launch(appName)) {
-        console.info("启动淘宝APP");
+
+    if (launch(app_package)) {
+        console.info("启动" + app_name + "APP");
     } else {
-        console.info("请手动启动淘宝APP")
+        console.info("请手动启动" + app_name + "APP")
     }
 
     console.show();
@@ -299,6 +305,7 @@ function isFinshed(uiName) {
         if (textContains(uiName[i]).exists() || descContains(uiName[i]).exists()) {
             back();
             sleep(500);
+            break;
         }
     }
 
@@ -350,8 +357,12 @@ function recoverApp() {
  * 过渡操作
  */
 function transitioPperation() {
-    if (text("我知道了").exists()) {
-        text("我知道了").click();
+    for (let index = 0; index < PASS_LIST.length; index++) {
+        if (text(PASS_LIST[index]).exists()) {
+            text(PASS_LIST[index]).click();
+            console.info("过渡操作：", PASS_LIST[index]);
+            sleep(500);
+        }
     }
 }
 /**
