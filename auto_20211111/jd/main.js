@@ -4,14 +4,14 @@
  * Author: czj
  * Date: 2021/10/20
  * Time: 23:02:50
- * Versions: 1.7.0
+ * Versions: 1.8.0
  * Github: https://github.com/czj2369/jd_tb_auto
  */
 
 // 需要完成的任务列表
-var TASK_LIST = ["浏览并关注", "浏览8s", "累计浏览", "浏览可得", "去首页浮层进入"];
+var TASK_LIST = ["浏览并关注", "浏览8s", "累计浏览", "浏览可得", "去首页浮层进入", "浏览5个品牌墙店铺", "小程序", "浏览5个品牌墙店铺"];
 // 过渡操作
-var PASS_LIST = ['请选择要使用的应用','我知道了'];
+var PASS_LIST = ['请选择要使用的应用', '我知道了'];
 // 判断停留时间
 var JUDGE_TIME = 0;
 // 定时器
@@ -22,6 +22,9 @@ var finished_task_num = new Array();
 var current_task_num = 0;
 // 浏览就返回标记
 var isBackFlag = false;
+// 小程序标记
+var isXcx = false;
+var appName = "com.jingdong.app.mall";
 var huodong_indexInParent_num = 9;
 
 init();
@@ -82,7 +85,6 @@ function init() {
  */
 function start() {
     auto.waitFor()
-    var appName = "com.jingdong.app.mall";
     if (launch(appName)) {
         console.info("启动京东APP");
     }
@@ -182,27 +184,22 @@ function viewTask(flag) {
             // 重置计时
             JUDGE_TIME = 0;
             var count = 0;
-            var button = className('android.view.View')
-                .depth(19)
-                .indexInParent(32)
-                .drawingOrder(0)
-                .clickable();
-            while (true && button.exists()) {
-                if (button.findOne().click()) {
-                    sleep(2000);
+            var pinPaiButtonList = className('android.view.View').indexInParent(1).depth(15).find()[10].children();
+            while (count <= 5) {
+                if (pinPaiButtonList[count].click()) {
                     console.info("浏览任务，点击返回");
-                    if (text("消息").exists() && text("扫啊扫").exists()) {
-                        break;
+                    sleep(2000)
+                    while (!text("到底了，没有更多了～").exists()) {
+                        if (id("aqw").click()) {
+                            count = count + 1;
+                            console.info("尝试返回", count);
+                        }
                     }
-                    count = count + 1;
-                    if (5 <= count) {
-                        swipe(807, 314, 807, 414, 1);
-                        sleep(1000);
-                    }
-                } else {
-                    break;
+                    sleep(2000)
                 }
             }
+            swipe(807, 314, 807, 414, 1);
+            sleep(2000);
             break;
         } else if (text("消息").exists() && text("扫啊扫").exists()) {
             console.warn("因为某些原因回到首页，重新进入活动界面");
@@ -276,6 +273,14 @@ function viewTask(flag) {
             viewAndFollow();
             isBackFlag = false;
             break;
+        } else if (isXcx) {
+            console.info("进入小程序任务");
+            // 重置计时
+            JUDGE_TIME = 0;
+            sleep(2000);
+            launch(appName);
+            isXcx = false;
+            break;
         } else {
             if (recoverApp()) {
                 break;
@@ -302,6 +307,8 @@ function addMarketCar() {
                 }
             }
             if (productList[index].click()) {
+                // 重置计时
+                JUDGE_TIME = 0;
                 log("加入购物车任务:正在添加第" + (index + 1) + "个商品");
                 sleep(2000);
                 while (true) {
@@ -326,7 +333,9 @@ function addMarketCar() {
 function interactionGrassPlanting() {
     var count = 0;
     while (true) {
-        if (randomClick(850, 430)) {
+        if (className('android.view.View').indexInParent(4).depth(14).findOne().click()) {
+            // 重置计时
+            JUDGE_TIME = 0;
             console.info("去逛逛");
             sleep(2000);
             if (back()) {
@@ -369,7 +378,8 @@ function getNeedSelector() {
 
                 // 如果是浏览就返回的任务，将标记设为true
                 isBackFlag = (TASK_LIST[i].indexOf("浏览可得") >= 0 || TASK_LIST[i].indexOf("浏览并关注可得2000") >= 0) ? true : false;
-
+                // 如果是小程序任务，将小程序标记设为true
+                isXcx = (TASK_LIST[i].indexOf("小程序") >= 0) ? true : false;
                 var rect = allSelector[current_task_num].bounds();
                 if (text("累计任务奖励").exists()) {
                     console.info("去完成任务，当前任务序列：", current_task_num)
@@ -412,12 +422,12 @@ function recoverApp() {
 /**
  * 过渡操作
  */
- function transitioPperation() {
-    for (let index = 0; index < PASS_LIST.length; index++) { 
+function transitioPperation() {
+    for (let index = 0; index < PASS_LIST.length; index++) {
         if (text(PASS_LIST[index]).exists()) {
             if (PASS_LIST[index].indexOf("请选择要使用的应用") >= 0) {
                 back();
-            }else{
+            } else {
                 text(PASS_LIST[index]).click();
                 console.info("过渡操作：", PASS_LIST[index]);
             }
