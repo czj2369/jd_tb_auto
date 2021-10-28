@@ -3,12 +3,12 @@
  * 
  * Author: czj
  * Date: 2021/10/21 13:01:32
- * Versions: 1.4.0
+ * Versions: 1.5.0
  * Github: https://github.com/czj2369/jd_tb_auto
  */
 
 // 需要忽略的任务中包含的关键字
-var IGNORE_LIST = ['农场', '芭芭农场', '下单', '蚂蚁森林', '淘特', '点淘', '充话费', '参与合伙', '喂小鸡', '斗地主', '续卡', '88VIP'];
+var IGNORE_LIST = ['农场', '芭芭农场', '下单', '蚂蚁森林', '淘特', '点淘', '充话费', '参与合伙', '喂小鸡', '斗地主', '续卡', '88VIP', '消消乐'];
 // 过渡操作
 var PASS_LIST = ['我再想想', '我知道了', '开心收下'];
 
@@ -109,6 +109,8 @@ function init() {
 function start() {
     auto.waitFor()
 
+    console.info("author:czj");
+    console.info("地址:https://github.com/czj2369/jd_tb_auto");
     if (launch(app_package)) {
         console.info("启动" + app_name + "APP");
     } else {

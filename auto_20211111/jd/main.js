@@ -9,9 +9,9 @@
  */
 
 // 需要完成的任务列表
-var TASK_LIST = ["浏览并关注", "浏览8s", "累计浏览", "浏览可得", "去首页浮层进入", "浏览5个品牌墙店铺", "小程序", "浏览5个品牌墙店铺"];
+var TASK_LIST = ["浏览并关注", "浏览8s", "累计浏览","浏览并关注可得2000", "浏览可得", "去首页浮层进入", "浏览5个品牌墙店铺", "小程序", "浏览5个品牌墙店铺"];
 // 过渡操作
-var PASS_LIST = ['请选择要使用的应用', '我知道了'];
+var PASS_LIST = ['请选择要使用的应用', '我知道了', '取消', "京口令已复制"];
 // 判断停留时间
 var JUDGE_TIME = 0;
 // 定时器
@@ -26,7 +26,8 @@ var isBackFlag = false;
 var isXcx = false;
 var appName = "com.jingdong.app.mall";
 var huodong_indexInParent_num = 9;
-
+// 记录活动页面头部坐标
+var headerXY;
 init();
 
 /**
@@ -87,6 +88,8 @@ function start() {
     auto.waitFor()
     if (launch(appName)) {
         console.info("启动京东APP");
+        console.info("author:czj");
+        console.info("地址:https://github.com/czj2369/jd_tb_auto");
     }
     console.show();
 }
@@ -100,7 +103,7 @@ function enterActivity() {
         if (text("累计任务奖励").exists()) {
             console.info("已经在任务界面");
             sleep(1000);
-
+            headerXY = id("a96").findOne().bounds();
         } else {
             if (desc("浮层活动").exists()) {
                 console.info("点击浮层活动");
@@ -121,6 +124,7 @@ function enterActivity() {
                 var rect = button.findOne().bounds();
                 randomClick(rect.centerX(), rect.centerY());
                 sleep(1000);
+                headerXY = id("a96").findOne().bounds();
 
             } else {
                 huodong_indexInParent_num = huodong_indexInParent_num + 1;
@@ -175,27 +179,37 @@ function viewTask(flag) {
             // 重置计时
             JUDGE_TIME = 0;
             if (interactionGrassPlanting()) {
+                back();
                 break;
             }
             break;
         } else if (text("到底了，没有更多了～").exists() && !text("消息").exists() && !text("扫啊扫").exists()
             && !(textStartsWith("当前进度").exists() && textEndsWith("10").exists())) {
             console.info("到底了，没有更多了～");
+            sleep(1000);
             // 重置计时
             JUDGE_TIME = 0;
             var count = 0;
-            var pinPaiButtonList = className('android.view.View').indexInParent(1).depth(15).find()[10].children();
             while (count <= 5) {
-                if (pinPaiButtonList[count].click()) {
-                    console.info("浏览任务，点击返回");
-                    sleep(2000)
-                    while (!text("到底了，没有更多了～").exists()) {
+                if (undefined === headerXY) {
+                    headerXY = id("a96").findOne().bounds();
+                }
+                var rightx = headerXY.right;
+                var righty = headerXY.bottom + 300;
+                while (click(rightx, righty)) {
+                    console.info("尝试点击坐标：", rightx, righty);
+                    count = count + 1;
+                    sleep(6000);
+                    if (!text("到底了，没有更多了～").exists()) {
                         if (id("aqw").click()) {
-                            count = count + 1;
+                            sleep(2000);
                             console.info("尝试返回", count);
+                            back();
+                            break;
                         }
+                    } else {
+                        righty = righty + 50;
                     }
-                    sleep(2000)
                 }
             }
             swipe(807, 314, 807, 414, 1);
@@ -226,41 +240,19 @@ function viewTask(flag) {
             console.info("邀请新朋友");
             // 重置计时
             JUDGE_TIME = 0;
-            var buttonList = className('android.view.View')
-                .depth(16)
-                .indexInParent(2)
+            var button = className('android.view.View')
+                .depth(20)
+                .indexInParent(0)
                 .drawingOrder(0)
-                .clickable().find();
-            var button;
-            for (let index = 0; index < buttonList.length; index++) {
-                if (buttonList[index].bounds().centerY() < 400) {
-                    button = buttonList[index];
-                }
-            }
-            if (randomClick(button.bounds().centerX(), button.bounds().centerY())) {
-                console.info("点击取消");
-                var buttonList2 = className('android.view.View')
-                    .depth(16)
-                    .indexInParent(1)
-                    .drawingOrder(0)
-                    .clickable().find();
-                var button2;
-                for (let index = 0; index < buttonList2.length; index++) {
-                    if (buttonList2[index].bounds().centerY() > 1400) {
-                        button2 = buttonList2[index];
-                    }
-                }
-                if (randomClick(button2.bounds().centerX(), button2.bounds().centerY())) {
-                    sleep(2000);
-                    console.log("点我收下");
-                    var cancelButton = className('android.view.View')
-                        .depth(4)
-                        .indexInParent(1)
-                        .drawingOrder(2)
-                        .clickable().findOne();
-                    if (cancelButton.click() || back()) {
-                        break;
-                    }
+                .clickable().find()[0].bounds();
+            var y = button.bottom;
+            while (click(button.right, y)) {
+                if (!text("累计任务奖励").exists()) {
+                    back();
+                    sleep(3000);
+                    break;
+                } else{
+                    y = y + 100;
                 }
             }
             break;
@@ -425,13 +417,22 @@ function recoverApp() {
 function transitioPperation() {
     for (let index = 0; index < PASS_LIST.length; index++) {
         if (text(PASS_LIST[index]).exists()) {
+            console.info("过渡操作：", PASS_LIST[index]);
             if (PASS_LIST[index].indexOf("请选择要使用的应用") >= 0) {
                 back();
+            } else if (text("查看同款").exists()) {
+                text(PASS_LIST[index]).click();
+            } else if (PASS_LIST[index].indexOf("已复制") >= 0) {
+                className('android.widget.LinearLayout')
+                    .depth(4)
+                    .indexInParent(1)
+                    .drawingOrder(2)
+                    .clickable()
+                    .findOne().click();
             } else {
                 text(PASS_LIST[index]).click();
-                console.info("过渡操作：", PASS_LIST[index]);
             }
-            sleep(500);
+            sleep(1000);
         }
     }
 }
