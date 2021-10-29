@@ -210,6 +210,9 @@ function viewTask(flag) {
                     } else {
                         righty = righty + 50;
                     }
+                    if(righty >= 1600) {
+                        break;
+                    }
                 }
             }
             swipe(807, 314, 807, 414, 1);
