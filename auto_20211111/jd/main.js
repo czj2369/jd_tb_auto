@@ -4,12 +4,12 @@
  * Author: czj
  * Date: 2021/10/20
  * Time: 23:02:50
- * Versions: 1.8.0
+ * Versions: 1.9.0
  * Github: https://github.com/czj2369/jd_tb_auto
  */
 
 // 需要完成的任务列表
-var TASK_LIST = ["浏览并关注", "浏览8s", "累计浏览","浏览并关注可得2000", "浏览可得", "去首页浮层进入", "浏览5个品牌墙店铺", "小程序", "浏览5个品牌墙店铺"];
+var TASK_LIST = ["浏览并关注", "浏览8s", "累计浏览","浏览并关注可得2000", "浏览可得", "去首页浮层进入", "浏览5个品牌墙店铺", "小程序", "品牌墙店铺","逛晚会页"];
 // 过渡操作
 var PASS_LIST = ['请选择要使用的应用', '我知道了', '取消', "京口令已复制"];
 // 判断停留时间
@@ -210,7 +210,7 @@ function viewTask(flag) {
                     } else {
                         righty = righty + 50;
                     }
-                    if(righty >= 1600) {
+                    if(righty >= 800) {
                         break;
                     }
                 }

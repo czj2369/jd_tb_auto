@@ -3,7 +3,7 @@
  * 
  * Author: czj
  * Date: 2021/10/21 13:01:32
- * Versions: 1.5.0
+ * Versions: 1.6.0
  * Github: https://github.com/czj2369/jd_tb_auto
  */
 
