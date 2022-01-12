@@ -74,6 +74,8 @@ function init() {
 
         viewTask(flag);
 
+        viewProduct();
+        
         addMarketCar();
 
     }
@@ -147,13 +149,14 @@ function viewTask(flag) {
     // 根据坐标点击任务，判断哪些需要进行
     sleep(2000);
     while (true && flag) {
-        if ((textStartsWith("获得").exists() && textEndsWith("汪汪币").exists()) || text("已浏览").exists()) {
+        if ((textStartsWith("获得").exists() && textEndsWith("汪汪币").exists()) || text("已浏览").exists() 
+            || (textStartsWith("获得").exists() && textEndsWith("爆竹").exists())) {
             console.info("任务完成，返回");
             viewAndFollow();
             // 重置计时
             JUDGE_TIME = 0;
             break;
-        } else if (text("任务已达上限").exists()) {
+        } else if (text("任务已达上限").exists() || text("已达上限").exists()) {
             console.info("任务已达上限,切换已完成按钮");
             // 将当前任务序号添加到列表中，防止后续点到
             finished_task_num[finished_task_num.length] = current_task_num;
@@ -169,8 +172,9 @@ function viewTask(flag) {
             // 重置计时
             JUDGE_TIME = 0;
             break;
-        } else if (textContains('当前页点击浏览5个').exists() || textContains('当前页浏览加购').exists()) {
-            console.info("当前为加入购物车任务");
+        } else if (textContains('当前页点击浏览5个').exists() || textContains('当前页浏览加购').exists()
+            || textContains('当前页点击浏览4个商品领爆竹').exists() || textContains('当前页浏览加购4个商品领爆竹').exists()) {
+            console.info("当前为加入购物车任务或浏览商品任务");
             // 重置计时
             JUDGE_TIME = 0;
             break;
@@ -322,8 +326,41 @@ function addMarketCar() {
 }
 
 /**
+ * 浏览商品
+ */
+function viewProduct() {
+    if (textContains('当前页点击浏览4个商品领爆竹').exists() || textContains('当前页浏览加购4个商品领爆竹').exists()) {
+        log("当前页点击浏览或加购4个商品领爆竹");
+        const productList = className('android.view.View').depth(15).indexInParent(4).clickable(true).find();
+        var count = 0;
+        for (index = 0; index < productList.length; index++) {
+            if (count == 4) {
+                if (back()) {
+                    sleep(3000)
+                    break;
+                }
+            }
+            if (productList[index].click()) {
+                // 重置计时
+                JUDGE_TIME = 0;
+                log("浏览商品任务:正在浏览第" + (index + 1) + "个商品");
+                sleep(2000);
+                while (true) {
+                    if (text("购物车").exists() && back()) {
+                        count = count + 1;
+                        sleep(2000);
+                        if (!text("购物车").exists()) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
  * 互动种草城
- * @returns 
  */
 function interactionGrassPlanting() {
     var count = 0;
