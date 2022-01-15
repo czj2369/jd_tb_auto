@@ -25,7 +25,8 @@ var isBackFlag = false;
 // 小程序标记
 var isXcx = false;
 var appName = "com.jingdong.app.mall";
-var huodong_indexInParent_num = 9;
+// 活动按钮indexInParent值 （2022炸年兽版本 感谢wudixiaoqiang 使用反馈）
+var huodong_indexInParent_num = 18;
 // 记录活动页面头部坐标
 var headerXY;
 init();
