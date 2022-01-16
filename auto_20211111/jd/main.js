@@ -2,14 +2,14 @@
  * JD双11赚汪汪币
  * 
  * Author: czj
- * Date: 2021/10/20
- * Time: 23:02:50
- * Versions: 1.9.0
+ * Date: 2022/01/16
+ * Time: 2022年1月16日22:24:44
+ * Versions: 2.0.0
  * Github: https://github.com/czj2369/jd_tb_auto
  */
 
 // 需要完成的任务列表
-var TASK_LIST = ["浏览并关注", "浏览8s", "累计浏览","浏览并关注可得2000", "浏览可得", "去首页浮层进入", "浏览5个品牌墙店铺", "小程序", "品牌墙店铺","逛晚会页"];
+var TASK_LIST = ["浏览并关注", "浏览8s", "累计浏览","浏览并关注可得2000", "浏览可得", "去首页浮层进入", "浏览5个品牌墙店铺", "小程序", "品牌墙店铺","逛晚会页","玩AR游戏可得"];
 // 过渡操作
 var PASS_LIST = ['请选择要使用的应用', '我知道了', '取消', "京口令已复制"];
 // 判断停留时间
@@ -410,7 +410,7 @@ function getNeedSelector() {
                 }
 
                 // 如果是浏览就返回的任务，将标记设为true
-                isBackFlag = (TASK_LIST[i].indexOf("浏览可得") >= 0 || TASK_LIST[i].indexOf("浏览并关注可得2000") >= 0) ? true : false;
+                isBackFlag = (TASK_LIST[i].indexOf("浏览可得") >= 0 || TASK_LIST[i].indexOf("浏览并关注可得2000") >= 0 || TASK_LIST[i].indexOf("玩AR游戏可得") >= 0) ? true : false;
                 // 如果是小程序任务，将小程序标记设为true
                 isXcx = (TASK_LIST[i].indexOf("小程序") >= 0) ? true : false;
                 var rect = allSelector[current_task_num].bounds();
