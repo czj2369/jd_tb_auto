@@ -4,7 +4,7 @@
  * Author: czj
  * Date: 2022/01/16
  * Time: 2022年1月16日22:24:44
- * Versions: 2.0.0
+ * Versions: 2.1.0
  * Github: https://github.com/czj2369/jd_tb_auto
  */
 
@@ -24,6 +24,8 @@ var current_task_num = 0;
 var isBackFlag = false;
 // 小程序标记
 var isXcx = false;
+// 品牌墙任务标记
+var isBackgroud = false;
 var appName = "com.jingdong.app.mall";
 // 活动按钮indexInParent值 （2022炸年兽版本 感谢wudixiaoqiang 使用反馈）
 var huodong_indexInParent_num = 18;
@@ -188,8 +190,8 @@ function viewTask(flag) {
                 break;
             }
             break;
-        } else if (text("到底了，没有更多了～").exists() && !text("消息").exists() && !text("扫啊扫").exists()
-            && !(textStartsWith("当前进度").exists() && textEndsWith("10").exists())) {
+        } else if ((text("到底了，没有更多了～").exists() && !text("消息").exists() && !text("扫啊扫").exists()
+        && !(textStartsWith("当前进度").exists() && textEndsWith("10").exists())) || isBackgroud) {
             console.info("到底了，没有更多了～");
             sleep(1000);
             // 重置计时
@@ -205,7 +207,7 @@ function viewTask(flag) {
                     console.info("尝试点击坐标：", rightx, righty);
                     count = count + 1;
                     sleep(6000);
-                    if (!text("到底了，没有更多了～").exists()) {
+                    if (!text("下拉有惊喜").exists()) {
                         if (id("aqw").click()) {
                             sleep(2000);
                             console.info("尝试返回", count);
@@ -220,6 +222,7 @@ function viewTask(flag) {
                     }
                 }
             }
+            isBackgroud = false;
             swipe(807, 314, 807, 414, 1);
             sleep(2000);
             break;
@@ -413,6 +416,8 @@ function getNeedSelector() {
                 isBackFlag = (TASK_LIST[i].indexOf("浏览可得") >= 0 || TASK_LIST[i].indexOf("浏览并关注可得2000") >= 0 || TASK_LIST[i].indexOf("玩AR游戏可得") >= 0) ? true : false;
                 // 如果是小程序任务，将小程序标记设为true
                 isXcx = (TASK_LIST[i].indexOf("小程序") >= 0) ? true : false;
+                // 如果是品牌墙任务，将背景墙任务标记为true
+                isBackgroud = (TASK_LIST[i].indexOf("品牌墙") >= 0) ? true : false;
                 var rect = allSelector[current_task_num].bounds();
                 if (text("累计任务奖励").exists()) {
                     console.info("去完成任务，当前任务序列：", current_task_num)
