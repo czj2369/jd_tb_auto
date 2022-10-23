@@ -3,7 +3,7 @@
  * 
  * Author: czj
  * Date: 2022/11/11
- * Versions: 1.0.0
+ * Versions: 1.0.1
  * Github: https://github.com/czj2369/jd_tb_auto
  */
 const sleepTime = 500;
@@ -71,7 +71,6 @@ function init() {
     // 启动任务
     while (true) {
         task_process = clikcFinish();
-        console.log(task_process);
         enterActivity();
         while (task_process) {
             execTask();
@@ -84,22 +83,21 @@ function init() {
  * 进入活动界面
  */
 function enterActivity() {
-    if (desc("浮层活动").exists()) {
+    if (desc("浮层活动").exists() && text("购物车")) {
         const rect = desc("浮层活动").findOne().bounds();
         click(rect.centerX(), rect.centerY());
         sleep(500)
         click(rect.centerX(), rect.centerY());
+        // 计时器重置
         JUDGE_TIME = 0;
-        while (true) {
-            if (textContains("距离下次抽到分红").exists()) {
-                console.log("点击做任务")
-                clickCenterXY(855, 1893, 1035, 1920);
-                sleep(2000);
-                // 计时器重置
-                JUDGE_TIME = 0;
-                break;
-            }
-        }
+    }
+    if (textContains("距离下次抽到分红").exists() && !text("做任务 赚金币").exists()) {
+        console.log("点击做任务")
+        clickCenterXY(855, 1893, 1035, 1920);
+        sleep(2000);
+        clickCenterXY(855, 1893, 1035, 1920);
+        // 计时器重置
+        JUDGE_TIME = 0;
     }
 }
 
@@ -123,7 +121,7 @@ function clikcFinish() {
     }
 
     console.log("当前任务序号：", TASK_ID)
-    const button = text("去完成").find()[TASK_ID];
+    const button = text("去领取").exists() ? text("去领取").find()[0] : text("去完成").find()[TASK_ID];
     if (button != undefined) {
         const rect = button.bounds()
         const parentButton = button.parent();
@@ -361,11 +359,11 @@ function recoverApp() {
         }
     }
 }
-/**
+ /**
  * JD221111
  *
  * Author: czj
  * Date: 2022/11/11
- * Versions: 1.0.0
+ * Versions: 1.0.1
  * Github: https://github.com/czj2369/jd_tb_auto
  */
