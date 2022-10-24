@@ -1,4 +1,5 @@
 # 618||双十一||淘宝||京东||赚喵糖||赚汪汪币||赚金币自动完成脚本
+
 基于AutoXJs编写的618||双十一||淘宝||京东||赚喵糖||赚汪汪币||赚金币自动完成脚本
 
 # 重要说明
@@ -12,6 +13,16 @@
 - 版本说明：JD(11.0.2)
 
 - 测试手机型号：Redmi K40,Redmi Note 4X
+
+- [AutoX.js](http://doc.autoxjs.com/#/)
+
+- 教程视频：
+
+  - [BV1fe411375g](https://www.bilibili.com/video/BV1fe411375g/)
+
+  - [BV1AD4y1b7wp](https://www.bilibili.com/video/BV1AD4y1b7wp/)
+
+    视频里面有两处需要手动干涉下，后续之后都是自动完成，如果不动了就重启下脚本，没办法保证脚本一开就全自动完成
 
   
 
