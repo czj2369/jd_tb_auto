@@ -2,8 +2,7 @@
  * JD221111
  * 
  * Author: czj
- * Date: 2022/11/11
- * Versions: 1.0.1
+ * Versions: 1.0.2
  * Github: https://github.com/czj2369/jd_tb_auto
  */
 const sleepTime = 500;
@@ -83,7 +82,7 @@ function init() {
  * 进入活动界面
  */
 function enterActivity() {
-    if (desc("浮层活动").exists() && text("购物车")) {
+    if (desc("浮层活动").exists() && text("购物车").exists()) {
         const rect = desc("浮层活动").findOne().bounds();
         click(rect.centerX(), rect.centerY());
         sleep(500)
@@ -107,6 +106,11 @@ function enterActivity() {
  */
 function clikcFinish() {
 
+    if (text("恭喜获得奖励").exists() || text("预约抽红包").exists() || text("继续环游").exists()) {
+        back();
+        sleep(1000);
+    }
+
     if (textContains("去打卡").exists()) {
         const daka = textContains("去打卡").findOne().bounds();
         click(daka.centerX(), daka.centerY());
@@ -121,7 +125,7 @@ function clikcFinish() {
     }
 
     console.log("当前任务序号：", TASK_ID)
-    const button = text("去领取").exists() ? text("去领取").find()[0] : text("去完成").find()[TASK_ID];
+    const button = text("去完成").find()[TASK_ID];
     if (button != undefined) {
         const rect = button.bounds()
         const parentButton = button.parent();
@@ -137,7 +141,7 @@ function clikcFinish() {
             }
         }
         //sleep(2000);
-        if (click(rect.centerX(), rect.centerY()) && click(rect.centerX(), rect.centerY())) {
+        if (click(rect.centerX(), rect.centerY())) {
             console.log("点击去完成");
             // 计时器重置
             JUDGE_TIME = 0;
@@ -145,6 +149,7 @@ function clikcFinish() {
             return true;
         }
     }
+    return false;
 }
 
 /**
@@ -227,7 +232,11 @@ function viewProduct() {
         const ret = list[0].bounds();
         if (click(ret.centerX(), ret.centerY())) {
             sleep(2000);
-            back();
+            while (text("购物车").exists()) {
+                sleep(2000);
+                back();
+                break;
+            }
             sleep(2000);
         }
         back();
@@ -246,7 +255,11 @@ function addCarTask() {
         console.log("浏览4个商品任务");
         if (clickCenterXY(315, 1098, 501, 1182)) {
             sleep(2000);
-            back();
+            while (text("购物车").exists()) {
+                sleep(2000);
+                back();
+                break;
+            }
             sleep(2000);
         }
         back();
@@ -360,10 +373,9 @@ function recoverApp() {
     }
 }
  /**
- * JD221111
- *
- * Author: czj
- * Date: 2022/11/11
- * Versions: 1.0.1
- * Github: https://github.com/czj2369/jd_tb_auto
- */
+* JD221111
+*
+* Author: czj
+* Versions: 1.0.2
+* Github: https://github.com/czj2369/jd_tb_auto
+*/
