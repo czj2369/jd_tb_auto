@@ -2,19 +2,17 @@
  * JD221111
  * 
  * Author: czj
- * Versions: 1.0.2
+ * Versions: 1.0.3
  * Github: https://github.com/czj2369/jd_tb_auto
  */
-const sleepTime = 500;
-const speed = 2;
 // 任务序号
 var TASK_ID = 0;
 const appPackageName = "com.jingdong.app.mall";
+// 干扰选项
+const INTERFERE_TASK_LIST = ['预约抽红包', '立即抽奖', '继续环游', '恭喜获得奖励']
 // 忽略任务
 const IGNORE_TASK_LIST = ['授权信息', '确认授权', '下单再得'];
 const BACK_LIST = ['获得8000金币', '获得7000金币', '获得4000金币', '获得3000金币'];
-// 是否需要进入活动界面
-var isNeedIntoActivityUi = false;
 // 判断停留时间
 var JUDGE_TIME = 0;
 // 定时器
@@ -30,6 +28,7 @@ function init() {
     console.log("项目地址:https://github.com/czj2369/jd_tb_auto");
     console.log("音量上键结束脚本运行");
     console.log("如果程序无法自动进入活动页，请手动进入！")
+    console.log("如果程序太久没有动静（半分钟内）,请结束脚本之后，重新启动脚本！")
     // 子线程监听音量上键按下
     threads.start(function () {
         events.setKeyInterceptionEnabled("volume_up", true);
@@ -106,9 +105,12 @@ function enterActivity() {
  */
 function clikcFinish() {
 
-    if (text("恭喜获得奖励").exists() || text("预约抽红包").exists() || text("继续环游").exists()) {
-        back();
-        sleep(1000);
+    for (var i = 0; i < INTERFERE_TASK_LIST.length; i++) {
+        if (text(INTERFERE_TASK_LIST[i]).exists()) {
+            back();
+            sleep(1000);
+            break;
+        }
     }
 
     if (textContains("去打卡").exists()) {
@@ -124,7 +126,6 @@ function clikcFinish() {
         is_get_reward = true;
     }
 
-    console.log("当前任务序号：", TASK_ID)
     const button = text("去完成").find()[TASK_ID];
     if (button != undefined) {
         const rect = button.bounds()
@@ -367,7 +368,8 @@ function recoverApp() {
             // 计时器重置
             JUDGE_TIME = 0;
             app.launch(appPackageName);
-            log("停留某个页面超过15s,自动返回，重置定时器。");
+            console.log("停留某个页面超过15s,自动返回，重置定时器。");
+            console.log("当前任务序号：", TASK_ID)
             return true;
         }
     }
@@ -376,6 +378,6 @@ function recoverApp() {
 * JD221111
 *
 * Author: czj
-* Versions: 1.0.2
+* Versions: 1.0.3
 * Github: https://github.com/czj2369/jd_tb_auto
 */
