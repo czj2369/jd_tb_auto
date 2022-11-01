@@ -2,14 +2,14 @@
  * TB221111
  * 
  * Author: czj
- * Versions: 1.0.0
+ * Versions: 1.0.1
  * Github: https://github.com/czj2369/jd_tb_auto
  */
 // 任务序号
 var TASK_ID = 0;
 const appPackageName = "com.taobao.taobao";
 // 忽略任务
-const IGNORE_TASK_LIST = ['邀请成功最高得', '支付宝', '淘宝乐园', '芭芭'];
+const IGNORE_TASK_LIST = ['邀请成功最高得', '支付宝', '淘宝乐园', '农场', '消消乐'];
 const BACK_LIST = ['任务完成', '任务已经全部完成啦', '下单可获得额外喵果'];
 // 判断停留时间
 var JUDGE_TIME = 0;
@@ -86,7 +86,11 @@ function enterActivity() {
         // 计时器重置
         JUDGE_TIME = 0;
     }
-
+    if (desc("10亿红包").exists()) {
+        desc("10亿红包").findOne().click();
+        // 计时器重置
+        JUDGE_TIME = 0;
+    }
     if (textContains("天猫双十一 喵喵爱糖果，瓜分十亿红包").exists()) {
         console.log("点击做任务")
         text("去赚能量").findOne().click();
