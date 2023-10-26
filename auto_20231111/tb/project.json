@@ -1,0 +1,10 @@
+{
+    "name": "tb231111",
+    "main": "main.js",
+    "ignore": [
+        "build"
+    ],
+    "packageName": "com.czj2369.tb231111",
+    "versionName": "1.0.0",
+    "versionCode": 1
+}
