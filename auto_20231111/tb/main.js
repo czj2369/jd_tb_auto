@@ -11,7 +11,7 @@ const appPackageName = "com.taobao.taobao";
 // 忽略任务
 const IGNORE_TASK_LIST = ['从首页入口回访', '支付宝', '淘宝乐园', '芭芭', '动物餐厅', '分享好友得金币', '蚂蚁森林', '火爆连连消', '兑换任务', '斗地主', '订阅互动', '开通省钱卡'];
 const BACK_LIST = ['任务完成', '任务已经全部完成啦', '下单可获得额外喵果'];
-const GAME_LIST = ['完成挑战', '挑战挑一挑任务', '可得互动奖励']
+const GAME_LIST = ['完成挑战', '挑战挑一挑任务', '可得互动奖励', '执行挖金矿任务']
 // 判断停留时间
 var JUDGE_TIME = 0;
 // 定时器
@@ -20,6 +20,7 @@ var interval;
 var task_process = true;
 init();
 function init() {
+    console.show(true);
     console.log("项目地址:https://github.com/czj2369/jd_tb_auto");
     console.log("音量上键结束脚本运行");
     console.log("如果程序无法自动进入活动页，请手动进入！")
@@ -51,13 +52,9 @@ function init() {
     });
 
     console.log("当前手机分辨率", device.width, device.height)
-    // 设置分辨率
-    // setScreenMetrics(720, 1560);
-    console.log("设置手机脚本分辨率", 720, 1560)
     auto.waitFor();
     auto.setMode("normal");
 
-    console.show();
     // 启动淘宝
     app.launch(appPackageName);
 
@@ -97,6 +94,8 @@ function enterActivity() {
         // 计时器重置
         JUDGE_TIME = 0;
     }
+    // 签到任务
+    signTask();
 }
 
 /**
@@ -142,9 +141,6 @@ function execTask() {
     // 判断任务序号是否需要自增
     judgeAddTaskId();
 
-    // 双十一喵果互动
-    interactionMG();
-
     // 浏览任务
     viewTask();
 
@@ -159,6 +155,26 @@ function judgeAddTaskId() {
     if (text("浏览得奖励").exists()) {
         // 计时器重置
         JUDGE_TIME = 0;
+    }
+}
+
+/**
+ * 签到任务和领取任务
+ */
+function signTask() {
+    if (text("立即签到").exists()) {
+        clickCenter("立即签到");
+        // 计时器重置
+        JUDGE_TIME = 0;
+        task_process = false;
+    }
+    if (text("立即领取").exists()) {
+        console.hide()
+        clickCenter("立即领取");
+        console.show(true)
+        // 计时器重置
+        JUDGE_TIME = 0;
+        task_process = false;
     }
 }
 
@@ -180,18 +196,6 @@ function viewTask() {
 }
 
 /**
- * 双十一喵果互动
- */
-function interactionMG() {
-    if (text("双十一喵果互动").exists()) {
-        text("允许").findOne().click();
-        // 计时器重置
-        JUDGE_TIME = 0;
-        task_process = false;
-    }
-}
-
-/**
  * 做游戏任务
  */
 function gameTask() {
@@ -203,7 +207,7 @@ function gameTask() {
             back();
             // 计时器重置
             JUDGE_TIME = 0;
-            return true;
+            task_process = false;
         }
     }
 
